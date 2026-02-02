@@ -1,0 +1,1270 @@
+scriptDescription();  // This displays the description of this script in Stellarium's Configuration window. (This must come before any other line below.)
+
+
+var marathonDate = "2026-03-18";  // This date (YYYY-MM-DD) is the night the marathon starts and will continue on to the following early morning hours.
+var sunSetAlt  = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunset before considering it dark enough to start the marathon.  (Must be a negative value.)
+var sunRiseAlt = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunrise before considering it too bright to continue the marathon.  (Must be a negative value.)
+var waitSecondsBetweenSelections = 1.5;  // Length of real time (in seconds) the script should spend in between selections of Messier objects.  (A larger value will have the simulation run at a slower rate.)
+var saveToOutputFiles = "no";  // At the conclusion of the script, it is possible to save the output to two files in the user directory.  (Default is 'no'. Otherwise, use 'yes' to save to the files.)
+                               // The two files will be a TXT file with the entire output information and a CSV file with just a portion of the TXT file to provide a convenient schedule.
+
+// This is the user-defined order of finding each Messier object. (Change the order as desired.)
+const MyMessierList = [
+   "M74",
+   "M110",
+   "M32",
+   "M31",
+   "M33",
+   "M77",
+   "M76",
+   "M103",
+   "M79",
+   "M34",
+   "M41",
+   "M93",
+   "M45",
+   "M42",
+   "M43",
+   "M78",
+   "M46",
+   "M47",
+   "M50",
+   "M1",
+   "M38",
+   "M36",
+   "M37",
+   "M48",
+   "M35",
+   "M67",
+   "M44",
+   "M95",
+   "M105",
+   "M96",
+   "M65",
+   "M66",
+   "M97",
+   "M108",
+   "M109",
+   "M82",
+   "M81",
+   "M106",
+   "M98",
+   "M85",
+   "M100",
+   "M99",
+   "M94",
+   "M84",
+   "M86",
+   "M88",
+   "M91",
+   "M64",
+   "M87",
+   "M90",
+   "M89",
+   "M58",
+   "M63",
+   "M59",
+   "M60",
+   "M53",
+   "M3",
+   "M49",
+   "M51",
+   "M61",
+   "M40",
+   "M101",
+   "M102",
+   "M104",
+   "M68",
+   "M5",
+   "M13",
+   "M92",
+   "M83",
+   "M12",
+   "M10",
+   "M107",
+   "M80",
+   "M57",
+   "M14",
+   "M4",
+   "M56",
+   "M9",
+   "M19",
+   "M62",
+   "M23",
+   "M16",
+   "M29",
+   "M11",
+   "M17",
+   "M27",
+   "M26",
+   "M71",
+   "M18",
+   "M24",
+   "M21",
+   "M20",
+   "M8",
+   "M25",
+   "M39",
+   "M28",
+   "M22",
+   "M6",
+   "M7",
+   "M69",
+   "M52",
+   "M54",
+   "M70",
+   "M15",
+   "M75",
+   "M55",
+   "M72",
+   "M73",
+   "M2",
+   "M30",
+];
+
+// IMPORTANT INFORMATION REGARDING THE 'MinutesDurations' LIST BELOW.
+// If it is believed a particular Messier object may take considerably more or less time than the average length of time (around 5 minutes) to find,
+// then it may be best to enter the time needed (in terms of minutes) for finding that Messier object in this list below.
+// Any Messier object either missing from the list below or assigned the value of '0' will automatically be allocated an average length of time.
+// Note that the order of the Messier objects in the list below is not important, nor is it even required to have any Messier object listed in this list.
+// Hint: The more updates done to the list below provides a more accurate overall time schedule.
+// Examples:
+//    If M83 is difficult for the user to find and takes about 10 minutes to find, the M83 line should be edited/added as such:
+//    "M83" : 10,
+//    If M45 is easy for the user to find and only takes about 30 seconds to find, the M45 line should be edited/added as such:
+//    "M45" : 0.5,
+// It is purely optional to do any editing to this 'MinutesDurations' list below.
+const MinutesDurations = {
+   "M1"   : 0,
+   "M2"   : 0,
+   "M3"   : 0,
+   "M4"   : 0,
+   "M5"   : 0,
+   "M6"   : 0,
+   "M7"   : 0,
+   "M8"   : 0,
+   "M9"   : 0,
+   "M10"  : 0,
+   "M11"  : 0,
+   "M12"  : 0,
+   "M13"  : 0,
+   "M14"  : 0,
+   "M15"  : 0,
+   "M16"  : 0,
+   "M17"  : 0,
+   "M18"  : 0,
+   "M19"  : 0,
+   "M20"  : 0,
+   "M21"  : 0,
+   "M22"  : 0,
+   "M23"  : 0,
+   "M24"  : 0,
+   "M25"  : 0,
+   "M26"  : 0,
+   "M27"  : 0,
+   "M28"  : 0,
+   "M29"  : 0,
+   "M30"  : 0,
+   "M31"  : 0,
+   "M32"  : 0,
+   "M33"  : 0,
+   "M34"  : 0,
+   "M35"  : 0,
+   "M36"  : 0,
+   "M37"  : 0,
+   "M38"  : 0,
+   "M39"  : 0,
+   "M40"  : 0,
+   "M41"  : 0,
+   "M42"  : 0,
+   "M43"  : 0,
+   "M44"  : 0,
+   "M45"  : 0,
+   "M46"  : 0,
+   "M47"  : 0,
+   "M48"  : 0,
+   "M49"  : 0,
+   "M50"  : 0,
+   "M51"  : 0,
+   "M52"  : 0,
+   "M53"  : 0,
+   "M54"  : 0,
+   "M55"  : 0,
+   "M56"  : 0,
+   "M57"  : 0,
+   "M58"  : 0,
+   "M59"  : 0,
+   "M60"  : 0,
+   "M61"  : 0,
+   "M62"  : 0,
+   "M63"  : 0,
+   "M64"  : 0,
+   "M65"  : 0,
+   "M66"  : 0,
+   "M67"  : 0,
+   "M68"  : 0,
+   "M69"  : 0,
+   "M70"  : 0,
+   "M71"  : 0,
+   "M72"  : 0,
+   "M73"  : 0,
+   "M74"  : 0,
+   "M75"  : 0,
+   "M76"  : 0,
+   "M77"  : 0,
+   "M78"  : 0,
+   "M79"  : 0,
+   "M80"  : 0,
+   "M81"  : 0,
+   "M82"  : 0,
+   "M83"  : 0,
+   "M84"  : 0,
+   "M85"  : 0,
+   "M86"  : 0,
+   "M87"  : 0,
+   "M88"  : 0,
+   "M89"  : 0,
+   "M90"  : 0,
+   "M91"  : 0,
+   "M92"  : 0,
+   "M93"  : 0,
+   "M94"  : 0,
+   "M95"  : 0,
+   "M96"  : 0,
+   "M97"  : 0,
+   "M98"  : 0,
+   "M99"  : 0,
+   "M100" : 0,
+   "M101" : 0,
+   "M102" : 0,
+   "M103" : 0,
+   "M104" : 0,
+   "M105" : 0,
+   "M106" : 0,
+   "M107" : 0,
+   "M108" : 0,
+   "M109" : 0,
+   "M110" : 0,
+};
+
+
+// Completely optional.  If using star charts to find Messier objects, enter the chart number/label that has the Messier object.
+// Note that the default values below are from the "Sky & Telescope's Pocket Sky Atlas".
+const MessierChartNum = {
+   "M1"   : "14",
+   "M2"   : "75",
+   "M3"   : "44",
+   "M4"   : "56",
+   "M5"   : "55",
+   "M6"   : "69",
+   "M7"   : "69",
+   "M8"   : "67",
+   "M9"   : "56",
+   "M10"  : "56",
+   "M11"  : "67",
+   "M12"  : "56",
+   "M13"  : "52",
+   "M14"  : "54",
+   "M15"  : "75",
+   "M16"  : "67",
+   "M17"  : "67",
+   "M18"  : "67",
+   "M19"  : "56",
+   "M20"  : "67",
+   "M21"  : "67",
+   "M22"  : "67",
+   "M23"  : "67",
+   "M24"  : "67",
+   "M25"  : "67",
+   "M26"  : "67",
+   "M27"  : "64",
+   "M28"  : "67",
+   "M29"  : "62",
+   "M30"  : "77",
+   "M31"  : "3",
+   "M32"  : "3",
+   "M33"  : "3",
+   "M34"  : "2",
+   "M35"  : "25",
+   "M36"  : "12",
+   "M37"  : "12",
+   "M38"  : "12",
+   "M39"  : "73",
+   "M40"  : "43",
+   "M41"  : "27",
+   "M42"  : "16",
+   "M43"  : "16",
+   "M44"  : "24",
+   "M45"  : "15",
+   "M46"  : "27",
+   "M47"  : "27",
+   "M48"  : "26",
+   "M49"  : "45",
+   "M50"  : "27",
+   "M51"  : "43",
+   "M52"  : "72",
+   "M53"  : "45",
+   "M54"  : "67",
+   "M55"  : "66",
+   "M56"  : "63",
+   "M57"  : "63",
+   "M58"  : "45",
+   "M59"  : "45",
+   "M60"  : "45",
+   "M61"  : "45",
+   "M62"  : "56",
+   "M63"  : "43",
+   "M64"  : "45",
+   "M65"  : "34",
+   "M66"  : "34",
+   "M67"  : "24",
+   "M68"  : "47",
+   "M69"  : "67",
+   "M70"  : "67",
+   "M71"  : "64",
+   "M72"  : "77",
+   "M73"  : "77",
+   "M74"  : "4",
+   "M75"  : "66",
+   "M76"  : "2",
+   "M77"  : "4",
+   "M78"  : "14",
+   "M79"  : "16",
+   "M80"  : "56",
+   "M81"  : "31",
+   "M82"  : "31",
+   "M83"  : "47",
+   "M84"  : "45",
+   "M85"  : "45",
+   "M86"  : "45",
+   "M87"  : "45",
+   "M88"  : "45",
+   "M89"  : "45",
+   "M90"  : "45",
+   "M91"  : "45",
+   "M92"  : "52",
+   "M93"  : "26",
+   "M94"  : "43",
+   "M95"  : "34",
+   "M96"  : "34",
+   "M97"  : "43",
+   "M98"  : "45",
+   "M99"  : "45",
+   "M100" : "45",
+   "M101" : "53",
+   "M102" : "53",
+   "M103" : "1",
+   "M104" : "47",
+   "M105" : "34",
+   "M106" : "43",
+   "M107" : "56",
+   "M108" : "43",
+   "M109" : "43",
+   "M110" : "3",
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////  Section below contains undocumented additional features of this script for advanced users only.  //////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// If wanting to force any start or end times, the start time and/or end time may be entered here in the next few lines after these comments.
+// One time can be entered while the other time remains blank.
+// Note that the times below will follow the 'marathonDate' date variable above.
+// In other words, each of the times below can be either in the night of the 'marathonDate' or in the next morning.
+// If either time is left blank, the script will automatically determine that particular time.
+// It is considered to be best to leave the times here blank unless there is a real need to specify a start or end time.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var forceStartTime = "";  // Force the marathon to start at this particular time.  Default is to keep this variable blank.  Entered time must be in this format:  HH:MM:SS (24-hour time)
+var forceEndTime   = "";  // Force the marathon to end at this particular time.    Default is to keep this variable blank.  Entered time must be in this format:  HH:MM:SS (24-hour time)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+if (!forceStartTime.trim().length == 0 && !/^\d{2}:\d{2}:\d{2}$/.test(forceStartTime)) {
+   core.debug("ERROR: 'forceStartTime' variable has an invalid value of: " + forceStartTime);  core.exit();
+}
+if (!forceEndTime.trim().length == 0 && !/^\d{2}:\d{2}:\d{2}$/.test(forceEndTime)) {
+   core.debug("ERROR: 'forceEndTime' variable has an invalid value of: " + forceEndTime);  core.exit();
+}
+
+
+// If wanting to force Stellarium to run this script at a particular location, enter the location below in the 'observerLocation' variable.
+// WARNING:  There is no check to ensure the location below is typed correctly.
+//           If the location is not entered correctly, the script will simply ignore the command, not change the present location and continue with the rest of the code.
+// Hint: While not running this script, go to the desired location in Stellarium.  Then, use the following command to get the exact text for the location:
+//       core.output(core.getObserverLocation());
+//////////////////////////////////////////////////
+observerLocation="";  // Enter the location here.
+//////////////////////////////////////////////////
+core.wait(0.1);
+if (!observerLocation.trim().length == 0) {
+   core.setObserverLocation(observerLocation,0);
+}
+
+
+// The following few lines of code can change how the view of the sky changes as the script goes through each Messier object.
+var moveAltAz = "constant"  // Decide which mode to move the sky around.  Options:  'constant' or 'periodic'.  (Default: 'constant')
+// If using the 'periodic' method, there are only a few times during the entire script when the Alt/Az view will move.  The view will move after each of the following objects are selected.
+// "messier"  = Name of the Messier object.  Stellarium will move after this particular Messier object is selected.
+// "azimuth"  = Stellarium will move to this azimuth coordinate.
+// "altitude" = Stellarium will move to this altitude coordinate.
+// "speed"    = How fast should Stellarium move to the alt/az coordinates.  ('1' is the fastest speed. Integers higher than '1' will move at a slower speed.)
+const moveAltAzPeriodic = [
+   { messier: "M103", azimuth: 230, altitude: 30, speed:  6 },
+   { messier: "M35",  azimuth:  90, altitude: 30, speed:  6 },
+   { messier: "M97",  azimuth:  60, altitude: 40, speed:  8 },
+   { messier: "M81",  azimuth: 150, altitude: 30, speed:  8 },
+   { messier: "M83",  azimuth: 105, altitude: 20, speed: 10 },
+   { messier: "M52",  azimuth: 135, altitude: 20, speed: 10 },
+];
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////  The script begins its actions here.  Only advanced users should modify anything below.   ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Perform a check to ensure the user has entered valid values for the top critical variables.
+if (!/^\d{4}-\d{2}-\d{2}$/.test(marathonDate)) { core.debug("ERROR: 'marathonDate' variable has an invalid value of: " + marathonDate);  core.exit(); }
+if (!/^-\d+\.?\d*$/.test(sunSetAlt))  { core.debug("ERROR: 'sunSetAlt' variable has an invalid value of: "  + sunSetAlt);  core.exit(); }
+if (!/^-\d+\.?\d*$/.test(sunRiseAlt)) { core.debug("ERROR: 'sunRiseAlt' variable has an invalid value of: " + sunRiseAlt); core.exit(); }
+if (isNaN(waitSecondsBetweenSelections) || waitSecondsBetweenSelections <= 0) {
+   core.debug("ERROR: 'waitSecondsBetweenSelections' variable has an invalid value of: " + waitSecondsBetweenSelections); core.exit();
+}
+if (!/^\s*yes\s*$/i.test(saveToOutputFiles) && !/^\s*no\s*$/i.test(saveToOutputFiles)) {
+   core.debug("ERROR: 'saveToOutputFiles' variable has an invalid value of: " + saveToOutputFiles); core.exit();
+}
+
+
+// Pause the simulation rate of time and initialize the two output arrays.
+core.setTimeRate(0);
+var outputHeader = new Array();
+var outputCSV = new Array();
+
+
+// Output location name.
+textOutput("Messier Marathon Location:  " + core.getObserverLocation(), "header");
+
+
+// Clear up the screen as much as possible and set up a standard sky.
+LabelMgr.deleteAllLabels();
+AsterismMgr.setFlagLines(false);
+AsterismMgr.setFlagLabels(false);
+ConstellationMgr.setFlagArt(false);
+ConstellationMgr.setFlagBoundaries(false);
+ConstellationMgr.setFlagLabels(false);
+ConstellationMgr.setFlagLines(false);
+core.setNightMode(false);
+core.setProjectionMode("ProjectionStereographic");
+core.setBortleScaleIndex(4);
+GridLinesMgr.setFlagAllGrids(false);
+GridLinesMgr.setFlagAllLines(false);
+LandscapeMgr.setFlagAtmosphere(false);
+LandscapeMgr.setFlagCardinalPoints(false);
+LandscapeMgr.setFlagFog(false);
+LandscapeMgr.setFlagLandscape(false);
+LandscapeMgr.setFlagOrdinalPoints(false);
+MarkerMgr.deleteAllMarkers();
+MeteorShowers.setEnableMarker(false);
+MilkyWay.setFlagShow(false);
+NebulaMgr.setFlagHints(false);
+Satellites.setFlagHintsVisible(false);
+Satellites.setFlagLabelsVisible(false);
+Satellites.setFlagOrbitLines(false);
+SporadicMeteorMgr.setFlagShow(false);
+StarMgr.setFlagLabels(false);
+StarMgr.setFlagStars(false);
+StelSkyLayerMgr.setFlagShow(false);
+StelMovementMgr.deselection();
+SolarSystem.setFlagPlanets(false);
+ZodiacalLight.setFlagShow(false);
+
+
+// Display the "Messier Marathon" title.
+screenWidth = core.getScreenWidth();
+openingTitle = LabelMgr.labelScreen("Messier Marathon",(screenWidth/2)-132,160,true,30,"#ff0000");
+
+
+// Do a sneaky way of getting the current system date/time as of this moment.
+core.setRealTime();  core.setTimeRate(0);  // Setting to realtime apparently also enables the time rate to move forward.
+systemDateTime = core.getDate("local");
+
+
+// Get start & end times while "Messier Marathon" title is displayed.
+core.wait(1);  // Allow things to disappear during this wait time.
+if (!forceStartTime.trim().length == 0) {
+   if (forceStartTime >= "00:00:00" && forceStartTime < "12:00:00") {
+      startTime = incrementDate(marathonDate) + "T" + forceStartTime;
+   } else {
+      startTime = marathonDate + "T" + forceStartTime;
+   }
+   core.wait(1.5);  // Add this wait time because time is not being spent calculating the start time.
+} else {
+   startTime = findStartTime(sunSetAlt,0.005);
+}
+core.setDate(startTime,"local");  core.wait(0.1);
+textOutput("Start Time (local):      " + startTime.substring(0,10) + " " + startTime.substring(11,19), "header");
+sunAltStartTime = core.getObjectInfo("Sun").altitude.toFixed(5);
+textOutput("Sun Altitude at Start:   " + sunAltStartTime + "°", "header");
+if (!forceEndTime.trim().length == 0) {
+   if (forceEndTime >= "00:00:00" && forceEndTime < "12:00:00") {
+      endTime = incrementDate(marathonDate) + "T" + forceEndTime;
+   } else {
+      endTime = marathonDate + "T" + forceEndTime;
+   }
+   core.wait(1.5);  // Add this wait time because time is not being spent calculating the start time.
+} else {
+   endTime = findEndTime(sunRiseAlt,0.005);
+}
+core.setDate(endTime,"local");  core.wait(0.1);
+textOutput("End Time (local):        " + endTime.substring(0,10) + " " + endTime.substring(11,19), "header");
+sunAltEndTime = core.getObjectInfo("Sun").altitude.toFixed(5);
+textOutput("Sun Altitude at End:     " + sunAltEndTime + "°", "header");
+LabelMgr.deleteLabel(openingTitle);
+
+
+// Sanity check of start and end times.
+if (startTime >= endTime ) { core.debug("ERROR: The start time (" + startTime + ") is not coming before the end time (" + endTime + ").");  core.exit(); }
+if (sunAltStartTime > 0)   { core.debug("ERROR: The sun is above the horizon at the start time (" + startTime + ").");  core.exit(); }
+if (sunAltEndTime > 0)     { core.debug("ERROR: The sun is above the horizon at the end time (" + endTime + ").");    core.exit(); }
+
+
+// Get the start & end times in terms of seconds.
+// IMPORTANT:  Start time is the number of seconds that have elapsed since 00:00:00 of the marathon date set in the 'marathonDate' variable at the top of the script.
+// End time is the number of seconds that have elapsed since 00:00:00 of the next date IN ADDITION to the previous day's 86400 (24*60*60) seconds.
+// In other words, the counting of seconds from the time the marathon starts does not reset after midnight is reached.
+// For example:  Start Time Seconds of 2025-03-28 22:00 is: 79200
+//               End Time Seconds of   2025-03-29 05:00 is: 104400 (18000 + 86400)
+startTimeSeconds = dateISOtoSeconds(startTime);
+endTimeSeconds   = dateISOtoSeconds(endTime);
+
+
+// Get total observation length of time.
+totalDurationSeconds = endTimeSeconds - startTimeSeconds;
+totalHours   = Math.floor(totalDurationSeconds / 3600);
+totalMinutes = Math.floor((totalDurationSeconds - (totalHours * 3600)) / 60);
+totalSeconds = totalDurationSeconds - (totalHours * 3600) - (totalMinutes * 60);
+textOutput("Total Duration:  " + totalHours + ":" + totalMinutes.toString().padStart(2,'0') + ":" + totalSeconds.toString().padStart(2,'0'), "header");
+
+
+// Output the total number of Messier objects to find.  (This script may be used for a partial "mini-marathons" as well - no need to do a marathon on all 110 objects.)
+textOutput("Number of Messier Objects:  " + MyMessierList.length, "header");
+
+
+// Determine the average time needed to view every Messier object.
+aveLengthMinutes  = totalDurationSeconds / MyMessierList.length / 60;
+textOutput("Average Observation Time:   " + Math.floor(aveLengthMinutes) + ":" + Math.round(((aveLengthMinutes - Math.floor(aveLengthMinutes)) * 60)).toString().padStart(2,'0'), "header");
+
+
+// Determine the default average time for every object excluding objects with a specified length of time listed in the 'MinutesDurations' array above.
+totalManualMinutes = 0;
+countObjectsManualTimes = 0;
+for (messier in MinutesDurations) {
+   if (MinutesDurations[messier] != 0 && MyMessierList.includes(messier)) {
+      countObjectsManualTimes++;
+      totalManualMinutes += MinutesDurations[messier];
+   }
+}
+if ( (totalManualMinutes * 60) > totalDurationSeconds ) {
+   core.debug("ERROR: Total amount of time entered for the manual time entries exceeds the total time allowed!");
+   core.exit();
+}
+otherAverageLengthSeconds = (totalDurationSeconds - (totalManualMinutes * 60)) / (MyMessierList.length - countObjectsManualTimes);
+MyMessierList.forEach(function(messier) {
+   if (messier in MinutesDurations) {
+      if (MinutesDurations[messier] == 0) {
+         MinutesDurations[messier] = otherAverageLengthSeconds / 60;
+      }
+   }
+   else {
+      MinutesDurations[messier] = otherAverageLengthSeconds / 60;  // If a Messier object is not listed in 'MinutesDurations', add it now to 'MinutesDurations' and assign it the average length of time.
+   }
+});
+
+
+// Output the Moon's illumination value.
+var moonAboveHorizonStart="";
+var moonAboveHorizonEnd="";
+core.setDate(secondsToDateISO(startTimeSeconds),"local");  core.wait(0.1);
+if (core.getObjectInfo("Moon")["altitude"] + (core.getObjectInfo("Moon")["size-dd"]/core.getObjectInfo("Moon")["scale"]/2) > 0) {
+   if (core.getObjectInfo("Moon")["azimuth"] < 180) {
+      moonLocationAtStart = "in the eastern half of the sky";
+   } else {
+      moonLocationAtStart = "in the western half of the sky";
+   }
+   moonAboveHorizonStart = "Moon's Illumination:  " + forceDecimal(core.getObjectInfo("Moon").illumination,1) + "%  (Above the horizon " + moonLocationAtStart + " at the start time!)";
+}
+core.setDate(secondsToDateISO(endTimeSeconds),"local");  core.wait(0.1);
+if (core.getObjectInfo("Moon")["altitude"] + (core.getObjectInfo("Moon")["size-dd"]/core.getObjectInfo("Moon")["scale"]/2) > 0) {
+   if (core.getObjectInfo("Moon")["azimuth"] < 180) {
+      moonLocationAtEnd = "in the eastern half of the sky";
+   } else {
+      moonLocationAtEnd = "in the western half of the sky";
+   }
+   moonAboveHorizonEnd = "Moon's Illumination:  " + forceDecimal(core.getObjectInfo("Moon").illumination,1) + "%  (Above the horizon " + moonLocationAtEnd + " at the end time!)";
+}
+if (moonAboveHorizonStart.length == 0 && moonAboveHorizonEnd.length == 0) {  // If the Moon is never above the horizon during the marathon, get its illumination value halfway through the marathon.
+   halfTimeSeconds = Math.round((startTimeSeconds + endTimeSeconds) / 2);
+   core.setDate(secondsToDateISO(halfTimeSeconds),"local");  core.wait(0.1);
+   textOutput("Moon's Illumination:  " + forceDecimal(core.getObjectInfo("Moon").illumination,1) + "%  (Below the horizon for the entire marathon.)", "header");
+} else if (moonAboveHorizonStart.length != 0 && moonAboveHorizonEnd.length == 0) {
+   textOutput(moonAboveHorizonStart, "header");
+} else if (moonAboveHorizonStart.length == 0 && moonAboveHorizonEnd.length != 0) {
+   textOutput(moonAboveHorizonEnd, "header");
+} else {
+   textOutput(moonAboveHorizonStart, "header");
+   textOutput(moonAboveHorizonEnd, "header");
+}
+
+
+// Display "Get ready!", but do not remove it until after the changes further below are done.
+screenWidth = core.getScreenWidth();  // Get value again in case the screen was recently resized.
+getReadyTitle = LabelMgr.labelScreen("Get ready!",(screenWidth/2)-83,160,true,30,"#ff0000");
+
+
+// Slowly make some visual changes while "Get Ready!" is displayed.
+GridLinesMgr.setFlagAzimuthalGrid(true);
+GridLinesMgr.setFlagHorizonLine(true);
+GridLinesMgr.setFlagMeridianLine(true);
+LandscapeMgr.setFlagCardinalPoints(true);
+LandscapeMgr.setCurrentLandscapeName("Zero Horizon",5);
+LandscapeMgr.setFlagLandscape(true);
+LandscapeMgr.setPolyLineThickness(0);  // Starting in 24.4, an annoying red line appears at the horizon.  So, eliminate the horizon line.
+core.moveToAltAzi(30,270,5);
+StelMovementMgr.zoomTo(100,5);
+StelMovementMgr.moveViewport(0,-17,5);
+core.wait(5);
+LabelMgr.deleteLabel(getReadyTitle);
+
+
+// Make a few more changes, go to the start time & display "Let's begin!".
+core.setDate(startTime,"local");
+screenWidth = core.getScreenWidth();  // Get value again in case the screen was recently resized.
+startingTitle = LabelMgr.labelScreen("Let's begin!",(screenWidth/2)-88,160,true,30,"#ff0000");
+core.wait(3);
+LabelMgr.deleteLabel(startingTitle);
+
+
+// Last thing to do before the marathon starts is to return the sky to a natural appearance.
+core.setGuiVisible(false);
+StelSkyDrawer.setFlagStarMagnitudeLimit(true);
+StelSkyDrawer.setCustomStarMagnitudeLimit(4);  // Set magnitude limit of the visible stars (change if desired).
+LandscapeMgr.setFlagAtmosphere(true);
+StarMgr.setFlagStars(true);
+StelSkyLayerMgr.setFlagShow(true);
+SolarSystem.setFlagPlanets(true);
+core.wait(3);
+
+
+// Create header row for CSV data output.
+textOutput("---------------- CSV ----------------", "header");
+textOutput("Order,Time,Messier,Azimuth,Altitude,RA(hms),DEC(dms),RA(dec),DEC(dec),Type(long),Type(short),Constellation(long),Constellation(short),Sun Alt,Duration,Chart", "csv");
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////  The actual marathon starts here in this large 'for' loop.   /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+for (messierIndex=0; messierIndex<MyMessierList.length; messierIndex++) {
+   selectedMessier = MyMessierList[messierIndex];
+   sequenceNumber  = messierIndex + 1;
+
+   //  Determine the time when to start observing selected Messier object.
+   if (sequenceNumber == 1) {
+      observationDateObject = new Date(startTime);
+   } else {
+      previousMessier = MyMessierList[messierIndex-1];
+      observationDateObject = new Date(observationDateObject.getTime() + MinutesDurations[previousMessier]*60000);
+   }
+
+   if (observationDateObject.getHours() == 0) {  // For the time displayed in the bottom left corner, only the midnight zero hour will get padding.
+      observationHourMinuteLabel = observationDateObject.getHours().toString().padStart(2,'0') + ":" +
+                                   observationDateObject.getMinutes().toString().padStart(2,'0');
+   } else {
+      observationHourMinuteLabel = observationDateObject.getHours().toString() + ":" +
+                                   observationDateObject.getMinutes().toString().padStart(2,'0');
+   }
+   observationHourMinuteLog = observationDateObject.getHours().toString().padStart(2,'0') + ":" +  // Ensure all times in the output/logs are in HH:MM:SS format.
+                              observationDateObject.getMinutes().toString().padStart(2,'0');
+
+   observationDateTimeISO = observationDateObject.getFullYear()                               + "-" +  // This is to get the ISO time in local time (not UTC time).
+                            (observationDateObject.getMonth() + 1).toString().padStart(2,'0') + "-" +
+                            observationDateObject.getDate().toString().padStart(2,'0')        + "T" +
+                            observationDateObject.getHours().toString().padStart(2,'0')       + ":" +
+                            observationDateObject.getMinutes().toString().padStart(2,'0')     + ":" +
+                            observationDateObject.getSeconds().toString().padStart(2,'0');
+
+
+   // Ensure the Stellarium date is set to the exact time the selected Messier object is first attempted to be observed.
+   core.setDate(observationDateTimeISO,"local");  core.wait(0.1);
+
+
+   // Display info (time, object, sequence number) in the bottom left corner of the screen.
+   screenHeight = core.getScreenHeight();
+   labelFirstVertical  = 0.90 * screenHeight;
+   labelSecondVertical = 40 + labelFirstVertical;
+   infoLineFirst  = LabelMgr.labelScreen(observationHourMinuteLabel + "   " + selectedMessier,30,labelFirstVertical,true,30,"#00ff00");
+   infoLineSecond = LabelMgr.labelScreen("(" + sequenceNumber + "/" + MyMessierList.length + ")",30,labelSecondVertical,true,20,"#00ff00");
+
+
+   // Select & mark the Messier object.
+   core.selectObjectByName(selectedMessier,false);
+   spotMarkerDot    = MarkerMgr.markerObject(selectedMessier,true,"disk","#ffff00",2,false,0);
+   spotMarkerSquare = MarkerMgr.markerObject(selectedMessier,true,"dashed-square","#6c87db",15,false,0);
+   LabelMgr.labelObject(selectedMessier,selectedMessier,true,14,"#ff0000","E",-1.0,"TextOnly",false, 0);
+
+
+   // For sake of the log output, get altitude & azimuth of the Messier object now - at the moment of first selecting it.  Also get other object information.
+   messierAz  = forceDecimal(core.getObjectInfo(selectedMessier).azimuth,1);
+   messierAlt = forceDecimal(core.getObjectInfo(selectedMessier).altitude,1);
+   if (core.getObjectInfo(selectedMessier).ra < 0) { messierRAFloat = 360 + core.getObjectInfo(selectedMessier).ra; }
+      else {                                         messierRAFloat = core.getObjectInfo(selectedMessier).ra; }
+   messierRAhour         = Math.floor(messierRAFloat / 15);
+   messierRAminutesFloat = ((messierRAFloat - (messierRAhour * 15)) / 15) * 60;
+   messierRAminutes      = Math.floor(messierRAminutesFloat);
+   messierRAseconds      = forceDecimal((messierRAminutesFloat - messierRAminutes) * 60,2);
+   messierRAhms          = Math.abs(messierRAhour) + "h" + messierRAminutes.toString().padStart(2,"0") + "m" + messierRAseconds.toString().padStart(messierRAseconds.length+2-messierRAseconds.indexOf("."),"0") + "s";
+   messierDECfloat       = core.getObjectInfo(selectedMessier).dec;
+   if (messierDECfloat < 0) { messierDECdegree = 1 + Math.floor(messierDECfloat); }
+      else {                  messierDECdegree = Math.floor(messierDECfloat); }
+   messierDECpercentage = Math.abs(messierDECfloat-messierDECdegree);
+   messierDECminute     = Math.floor(messierDECpercentage * 60);
+   messierDECsecond     = forceDecimal(((messierDECpercentage * 60) - messierDECminute) * 60,1);
+   messierDECdms        = messierDECdegree + "°" + messierDECminute.toString().padStart(2,"0") + "'" + messierDECsecond.toString().padStart(messierDECsecond.length+2-messierDECsecond.indexOf("."),"0") + "\"";
+   sunAltitude          = forceDecimal(core.getObjectInfo("Sun").altitude,1);
+
+
+   // For sake of the log output, calculate duration of the Messier object search in minutes & seconds.
+   durationMinutes = Math.floor(MinutesDurations[selectedMessier]);
+   durationSeconds = Math.round((MinutesDurations[selectedMessier] - durationMinutes) * 60);
+   durationMS = durationMinutes + ":" + durationSeconds.toString().padStart(2,'0');
+
+
+   // Move the view now only if the 'constant' mode has been chosen. (This is the default behavior.)
+   if (/^\s*constant\s*$/i.test(moveAltAz)) { core.moveToAltAzi(30,messierAz,waitSecondsBetweenSelections*0.5); }
+
+
+   // Log output to the Script Console (if running this script from the Script Console).
+   textOutput(sequenceNumber + "," +
+              observationHourMinuteLog + "," +
+              selectedMessier + "," +
+              messierAz + "°," +
+              messierAlt + "°," +
+              messierRAhms + "," +
+              messierDECdms + "," +
+              forceDecimal(messierRAFloat,3) + "°," +
+              forceDecimal(messierDECfloat,3) + "°," +
+              messierGetType(selectedMessier) + "," +
+              typeInitials(messierGetType(selectedMessier,"typelong")) + "," +
+              constellationLongName(core.getObjectInfo(selectedMessier).iauConstellation) + "," +
+              core.getObjectInfo(selectedMessier).iauConstellation + "," +
+              sunAltitude + "," +
+              durationMS + "," +
+              MessierChartNum[selectedMessier], "csv");
+
+
+   // Advance the Stellarium simulation time by the length of time needed to observe the current Messier object.
+   simRate = MinutesDurations[selectedMessier] * 60 / waitSecondsBetweenSelections;
+   core.setTimeRate(simRate);
+
+
+   // Wait before selecting the next Messier object.
+   core.wait(waitSecondsBetweenSelections);
+
+
+   // At this point in the script, the Stellarium simulation time should be close to being equal to the last moment of observing the current Messier object.
+   // Prevent Stellarium from overshooting the next Messier object by momentarily stopping the sim rate here.
+   core.setTimeRate(0);
+
+
+   // Done with the current Messier object.  So, clear up the marker & information for the current Messier object.
+   MarkerMgr.deleteMarker(spotMarkerSquare);
+   LabelMgr.deleteLabel(infoLineFirst);
+   LabelMgr.deleteLabel(infoLineSecond);
+
+
+   // Move the view now only if the 'periodic' mode has been chosen.  (The 'periodic' mode is not the default behavior.)
+   if (/^\s*periodic\s*$/i.test(moveAltAz)) {
+      for (pIndex=0; pIndex<moveAltAzPeriodic.length; pIndex++) {
+         if (moveAltAzPeriodic[pIndex].messier == selectedMessier) {
+            core.moveToAltAzi(moveAltAzPeriodic[pIndex].altitude,moveAltAzPeriodic[pIndex].azimuth,waitSecondsBetweenSelections*moveAltAzPeriodic[pIndex].speed);
+         }
+      }
+   }
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////  The large 'for' loop that is actually running the marathon ends here.   /////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Make sure the script ends at the exact end time of the marathon.
+core.setDate(endTime,"local");
+
+
+// Optional: Save output to both a CSV and a TXT file. (Default is to not save to any file.)
+if (/^\s*yes\s*$/i.test(saveToOutputFiles)) {
+   core.resetOutput();
+   outputCSV.forEach(function(element) { core.output(element); });
+   outputFileCSV = "MessierMarathon_" + systemDateTime + ".csv";
+   outputFileCSV = outputFileCSV.replace(/:/g, "-");
+   outputFileCSV = outputFileCSV.replace(/T/g, "_");
+   core.saveOutputAs(outputFileCSV);
+   core.debug("Output CSV filename = " + outputFileCSV);
+
+   core.resetOutput();
+   outputHeader.forEach(function(element) { core.output(element); });
+   outputCSV.forEach(function(element) { core.output(element); });
+   outputFileAll = "MessierMarathon_" + systemDateTime + ".txt";
+   outputFileAll = outputFileAll.replace(/:/g, "-");
+   outputFileAll = outputFileAll.replace(/T/g, "_");
+   core.saveOutputAs(outputFileAll);
+   core.debug("Output TXT filename = " + outputFileAll);
+}
+
+
+// Finish up the script and return control of Stellarium (the GUI) to the user.
+core.selectObjectByName("", true);
+screenWidth = core.getScreenWidth();  // Get value again in case the screen was recently resized.
+finishedTitle = LabelMgr.labelScreen("Finished!",(screenWidth/2)-134,200,true,60,"#00ff00");
+core.wait(3);
+LabelMgr.deleteLabel(finishedTitle);
+core.setGuiVisible(true);
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////  Script ends here at this point.  Below are simply functions used by the script above.   /////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+// During the script, as text is outputted to the Script Console, also save each line of output to an array to be used at the end of the script.
+function textOutput (textString, destination) {
+   textString = String(textString);
+   core.output(textString);
+   if (destination == "header") {
+      outputHeader.push(textString);   // outputHeader is a global array.
+   } else if (destination == "csv") {
+      outputCSV.push(textString);      // outputCSV is a global array.
+   } else {
+      core.debug("Invalid 'destination' sent to function 'textOutput'.");
+      core.debug("Script is exiting now.");
+      core.exit();
+   }
+   return;
+}
+
+
+// Force decimal value to appear with a certain precision and return the number value as a string.
+function forceDecimal (input, precision) {  // 'precision' must be a whole number greater than 0.
+   var inputString     = String(input);
+   var precisionNumber = Number(precision);
+
+   if ( precisionNumber < 1 ) { return (inputString); }
+
+   var decimalMoved = ( Number(inputString) * Math.pow(10,precisionNumber) ).toString();
+   if (decimalMoved.includes("-") && decimalMoved.includes(".5")) { decimalMoved = decimalMoved.replace(".5",".0"); }  // A negative decimal number rounds up (closer to zero).
+   var rounded = ( (Math.round(decimalMoved)) / Math.pow(10,precisionNumber) ).toString();
+   if ( !rounded.includes(".") ) { rounded = rounded + ".0";  }
+   var padValue = rounded.toString().indexOf(".") + precisionNumber + 1;
+   var returnValue = rounded.padEnd(padValue,"0");
+   return (returnValue);
+}
+
+
+// Take ISO date string (YYYY-MM-DDTHH:MM:SS) and calculate the number of seconds since epoch (00:00:00 of the marathon date).
+function dateISOtoSeconds (iso) {
+   var seconds = (iso.substring(11,13) * 3600) + (iso.substring(14,16) * 60) + (iso.substring(17,19) * 1);
+   if ( Number(iso.substring(5,7)) == Number(marathonDate.substring(5,7)) && Number(iso.substring(8,10)) > Number(marathonDate.substring(8,10)) ) {
+      seconds = seconds + (24*60*60);
+   } else if (Number(iso.substring(8,10)) == 1 && Number(iso.substring(8,10)) != Number(marathonDate.substring(8,10)) ) {
+      seconds = seconds + (24*60*60);
+   }
+   return (seconds);
+}
+
+
+// Take a date (YYYY-MM-DD) and return the next date (YYYY-MM-DD).
+function incrementDate (dateToChange) {
+   var dateObject    = new Date(dateToChange + "T00:00:00");
+   var newDateObject = new Date(dateObject.setDate(dateObject.getDate() + 1));
+   var newYear  = newDateObject.getFullYear();
+   var newMonth = (newDateObject.getMonth()+1).toString().padStart(2,'0');
+   var newDay   = newDateObject.getDate().toString().padStart(2,'0');
+   return (newYear + "-" + newMonth + "-" + newDay);
+}
+
+
+// Take the elapsed seconds and return an ISO date (YYYY-MM-DDTHH:MM:SS).
+function secondsToDateISO (totalSeconds) {
+   totalSeconds = Math.round(totalSeconds);
+   var hours    = Math.floor(totalSeconds / 3600).toString().padStart(2,'0');
+   hours        = hours.toString().padStart(2,'0');
+   var minutes  = Math.floor((totalSeconds - (hours * 3600)) / 60);
+   minutes      = minutes.toString().padStart(2,'0');
+   var seconds  = totalSeconds - (hours * 3600) - (minutes * 60);
+   seconds      = seconds.toString().padStart(2,'0');
+   if (totalSeconds >= 86400) {
+      hours = (Number(hours) - 24).toString().padStart(2,'0');  // Fix hours here if seconds leads into the next day.
+      return (incrementDate(marathonDate.substring(0,10)) + "T" + hours + ":" + minutes + ":" + seconds);
+   }
+   return (marathonDate.substring(0,10) + "T" + hours + ":" + minutes + ":" + seconds);
+}
+
+
+// Determine the exact ISO date/time when the marathon starts by the sunset altitude determined by the user.  (Returns: YYYY-MM-DDTHH:MM:SS)
+function findStartTime (sunSetAltitude, degreeAccuracy) {
+   var currentAltDateISO = marathonDate.substring(0,10) + "T12:00:00";
+   var currentAltSeconds = dateISOtoSeconds(currentAltDateISO);
+
+   var altDiff = 180;  // Arbitrarily set to the highest possible altitude difference.
+   var changeSeconds = 3600;
+   core.setDate(currentAltDateISO,"local");  core.wait(0.1);
+   var currentAlt = core.getObjectInfo("Sun").altitude;
+   var previousHighAltSeconds = 0;
+   var infiniteCheck = 1;
+   var infiniteLimit = 50;
+
+   while (altDiff > Number(degreeAccuracy)) {
+      if ( currentAlt > sunSetAltitude ) {
+         previousHighAltSeconds = currentAltSeconds;
+         currentAltSeconds      = currentAltSeconds + changeSeconds;
+         currentAltDateISO      = secondsToDateISO(currentAltSeconds);
+         // core.output("x - " + currentAltDateISO + " - " + currentAlt);
+      } else {
+         currentAltSeconds  = previousHighAltSeconds;
+         changeSeconds      = changeSeconds / 2;
+         currentAltSeconds  = currentAltSeconds + changeSeconds;
+         currentAltDateISO  = secondsToDateISO(currentAltSeconds);
+         // core.output("y - " + currentAltDateISO + " - " + currentAlt);
+      }
+
+      core.setDate(currentAltDateISO,"local");  core.wait(0.1);
+      currentAlt = core.getObjectInfo("Sun").altitude;
+      altDiff = Math.abs(currentAlt - sunSetAltitude);
+      if (infiniteCheck == infiniteLimit) { break; }
+      infiniteCheck++;
+   }
+   return (currentAltDateISO);
+}
+
+
+// Determine the exact ISO date/time when the marathon ends by the sunrise altitude determined by the user.  (Returns: YYYY-MM-DDTHH:MM:SS)
+function findEndTime (sunRiseAltitude, degreeAccuracy) {
+   var currentAltDateISO = incrementDate(marathonDate.substring(0,10)) + "T00:00:00";
+   var currentAltSeconds = dateISOtoSeconds(currentAltDateISO);
+
+   var altDiff = 180;  // Arbitrarily set to the highest possible altitude difference.
+   var changeSeconds = 43200;
+   core.setDate(currentAltDateISO,"local");  core.wait(0.1);
+   var currentAlt = core.getObjectInfo("Sun").altitude;
+   var previousLowAltSeconds = 86400;
+   var infiniteCheck = 1;
+   var infiniteLimit = 50;
+
+   while (altDiff > Number(degreeAccuracy)) {
+      if ( currentAlt < sunRiseAltitude ) {
+         previousLowAltSeconds = currentAltSeconds;
+         currentAltSeconds     = currentAltSeconds + changeSeconds;
+         currentAltDateISO     = secondsToDateISO(currentAltSeconds);
+         // core.output("x - " + currentAltDateISO + " - " + currentAlt);
+      } else {
+         currentAltSeconds  = previousLowAltSeconds;
+         changeSeconds      = changeSeconds / 2;
+         currentAltSeconds  = currentAltSeconds + changeSeconds;
+         currentAltDateISO  = secondsToDateISO(currentAltSeconds);
+         // core.output("y - " + currentAltDateISO + " - " + currentAlt);
+      }
+
+      core.setDate(currentAltDateISO,"local");  core.wait(0.1);
+      currentAlt = core.getObjectInfo("Sun").altitude;
+      altDiff = Math.abs(currentAlt - sunRiseAltitude);
+      if (infiniteCheck == infiniteLimit) { break; }
+      infiniteCheck++;
+   }
+   return (currentAltDateISO);
+}
+
+
+// The CSV output will output the long description of each Messier object's type.
+function messierGetType (myMessier) {
+   const MessierObjectType = {
+      "M1"   : "Supernova Remnant",
+      "M2"   : "Globular Star Cluster",
+      "M3"   : "Globular Star Cluster",
+      "M4"   : "Globular Star Cluster",
+      "M5"   : "Globular Star Cluster",
+      "M6"   : "Open Star Cluster",
+      "M7"   : "Open Star Cluster",
+      "M8"   : "Nebula",
+      "M9"   : "Globular Star Cluster",
+      "M10"  : "Globular Star Cluster",
+      "M11"  : "Open Star Cluster",
+      "M12"  : "Globular Star Cluster",
+      "M13"  : "Globular Star Cluster",
+      "M14"  : "Globular Star Cluster",
+      "M15"  : "Globular Star Cluster",
+      "M16"  : "Cluster Associated w/ Nebulosity",
+      "M17"  : "Cluster Associated w/ Nebulosity",
+      "M18"  : "Open Star Cluster",
+      "M19"  : "Globular Star Cluster",
+      "M20"  : "Cluster Associated w/ Nebulosity",
+      "M21"  : "Open Star Cluster",
+      "M22"  : "Globular Star Cluster",
+      "M23"  : "Open Star Cluster",
+      "M24"  : "Stars (star cloud)",
+      "M25"  : "Open Star Cluster",
+      "M26"  : "Open Star Cluster",
+      "M27"  : "Planetary Nebula",
+      "M28"  : "Globular Star Cluster",
+      "M29"  : "Open Star Cluster",
+      "M30"  : "Globular Star Cluster",
+      "M31"  : "Galaxy",
+      "M32"  : "Galaxy",
+      "M33"  : "Galaxy",
+      "M34"  : "Open Star Cluster",
+      "M35"  : "Open Star Cluster",
+      "M36"  : "Open Star Cluster",
+      "M37"  : "Open Star Cluster",
+      "M38"  : "Open Star Cluster",
+      "M39"  : "Open Star Cluster",
+      "M40"  : "Stars (two stars)",
+      "M41"  : "Open Star Cluster",
+      "M42"  : "Nebula w/ Open Star Cluster",
+      "M43"  : "Nebula w/ Open Star Cluster",
+      "M44"  : "Open Star Cluster",
+      "M45"  : "Cluster Associated w/ Nebulosity",
+      "M46"  : "Open Star Cluster",
+      "M47"  : "Open Star Cluster",
+      "M48"  : "Open Star Cluster",
+      "M49"  : "Galaxy",
+      "M50"  : "Open Star Cluster",
+      "M51"  : "Galaxy",
+      "M52"  : "Open Star Cluster",
+      "M53"  : "Globular Star Cluster",
+      "M54"  : "Globular Star Cluster",
+      "M55"  : "Globular Star Cluster",
+      "M56"  : "Globular Star Cluster",
+      "M57"  : "Planetary Nebula",
+      "M58"  : "Galaxy",
+      "M59"  : "Galaxy",
+      "M60"  : "Galaxy",
+      "M61"  : "Galaxy",
+      "M62"  : "Globular Star Cluster",
+      "M63"  : "Galaxy",
+      "M64"  : "Galaxy",
+      "M65"  : "Galaxy",
+      "M66"  : "Galaxy",
+      "M67"  : "Open Star Cluster",
+      "M68"  : "Globular Star Cluster",
+      "M69"  : "Globular Star Cluster",
+      "M70"  : "Globular Star Cluster",
+      "M71"  : "Globular Star Cluster",
+      "M72"  : "Globular Star Cluster",
+      "M73"  : "Stars (four stars)",
+      "M74"  : "Galaxy",
+      "M75"  : "Globular Star Cluster",
+      "M76"  : "Planetary Nebula",
+      "M77"  : "Galaxy",
+      "M78"  : "Reflection Nebula",
+      "M79"  : "Globular Star Cluster",
+      "M80"  : "Globular Star Cluster",
+      "M81"  : "Galaxy",
+      "M82"  : "Galaxy",
+      "M83"  : "Galaxy",
+      "M84"  : "Galaxy",
+      "M85"  : "Galaxy",
+      "M86"  : "Galaxy",
+      "M87"  : "Galaxy",
+      "M88"  : "Galaxy",
+      "M89"  : "Galaxy",
+      "M90"  : "Galaxy",
+      "M91"  : "Galaxy",
+      "M92"  : "Globular Star Cluster",
+      "M93"  : "Open Star Cluster",
+      "M94"  : "Galaxy",
+      "M95"  : "Galaxy",
+      "M96"  : "Galaxy",
+      "M97"  : "Planetary Nebula",
+      "M98"  : "Galaxy",
+      "M99"  : "Galaxy",
+      "M100" : "Galaxy",
+      "M101" : "Galaxy",
+      "M102" : "Galaxy",
+      "M103" : "Open Star Cluster",
+      "M104" : "Galaxy",
+      "M105" : "Galaxy",
+      "M106" : "Galaxy",
+      "M107" : "Globular Star Cluster",
+      "M108" : "Galaxy",
+      "M109" : "Galaxy",
+      "M110" : "Galaxy",
+   };
+   if (myMessier in MessierObjectType) {
+      return (MessierObjectType[myMessier]);
+   } else {
+      return "undefined";  // In the unlikely event a non-Messier object is included in the 'MyMessierList' (which is allowable).
+   }
+}
+
+
+// If the type of the object is known, look up the short initials of the type.
+function typeInitials (typeLongDescription) {
+   const typeInitialsLookup = {
+      "Cluster Associated w/ Nebulosity" : "CN",
+      "Galaxy"                           : "G",
+      "Globular Star Cluster"            : "GC",
+      "Nebula w/ Open Star Cluster"      : "NC",
+      "Nebula"                           : "N",
+      "Open Star Cluster"                : "OC",
+      "Planetary Nebula"                 : "PN",
+      "Reflection Nebula"                : "RN",
+      "Stars (two stars)"                : "S2",
+      "Stars (four stars)"               : "S4",
+      "Stars (star cloud)"               : "SC",
+      "Supernova Remnant"                : "SN",
+   };
+   if (typeLongDescription in typeInitialsLookup) {
+      return (typeInitialsLookup[typeLongDescription]);
+   } else {
+      return "undefined";  // In the event a long description has not been set for a non-Messier object.
+   }
+
+}
+
+
+// With the short initials of the constellation known, look up the long name of the constellation.
+function constellationLongName (constellationShort) {
+   const constelltionLongNameLookup = {
+      "And" : "Andromeda",
+      "Ant" : "Antlia",
+      "Aps" : "Apus",
+      "Aqr" : "Aquarius",
+      "Aql" : "Aquila",
+      "Ara" : "Ara",
+      "Ari" : "Aries",
+      "Aur" : "Auriga",
+      "Boo" : "Boötes",
+      "Cae" : "Caelum",
+      "Cam" : "Camelopardalis",
+      "Cnc" : "Cancer",
+      "CVn" : "Canes Venatici",
+      "CMa" : "Canis Major",
+      "CMi" : "Canis Minor",
+      "Cap" : "Capricornus",
+      "Car" : "Carina",
+      "Cas" : "Cassiopeia",
+      "Cen" : "Centaurus",
+      "Cep" : "Cepheus",
+      "Cet" : "Cetus",
+      "Cha" : "Chamaeleon",
+      "Cir" : "Circinus",
+      "Col" : "Columba",
+      "Com" : "Coma Berenices",
+      "CrA" : "Corona Australis",
+      "CrB" : "Corona Borealis",
+      "Crv" : "Corvus",
+      "Crt" : "Crater",
+      "Cru" : "Crux",
+      "Cyg" : "Cygnus",
+      "Del" : "Delphinus",
+      "Dor" : "Dorado",
+      "Dra" : "Draco",
+      "Equ" : "Equuleus",
+      "Eri" : "Eridanus",
+      "For" : "Fornax",
+      "Gem" : "Gemini",
+      "Gru" : "Grus",
+      "Her" : "Hercules",
+      "Hor" : "Horologium",
+      "Hya" : "Hydra",
+      "Hyi" : "Hydrus",
+      "Ind" : "Indus",
+      "Lac" : "Lacerta",
+      "Leo" : "Leo",
+      "LMi" : "Leo Minor",
+      "Lep" : "Lepus",
+      "Lib" : "Libra",
+      "Lup" : "Lupus",
+      "Lyn" : "Lynx",
+      "Lyr" : "Lyra",
+      "Men" : "Mensa",
+      "Mic" : "Microscopium",
+      "Mon" : "Monoceros",
+      "Mus" : "Musca",
+      "Nor" : "Norma",
+      "Oct" : "Octans",
+      "Oph" : "Ophiuchus",
+      "Ori" : "Orion",
+      "Pav" : "Pavo",
+      "Peg" : "Pegasus",
+      "Per" : "Perseus",
+      "Phe" : "Phoenix",
+      "Pic" : "Pictor",
+      "Psc" : "Pisces",
+      "PsA" : "Piscis Austrinus",
+      "Pup" : "Puppis",
+      "Pyx" : "Pyxis",
+      "Ret" : "Reticulum",
+      "Sge" : "Sagitta",
+      "Sgr" : "Sagittarius",
+      "Sco" : "Scorpius",
+      "Scl" : "Sculptor",
+      "Sct" : "Scutum",
+      "Ser" : "Serpens",
+      "Sex" : "Sextans",
+      "Tau" : "Taurus",
+      "Tel" : "Telescopium",
+      "Tri" : "Triangulum",
+      "TrA" : "Triangulum Australe",
+      "Tuc" : "Tucana",
+      "UMa" : "Ursa Major",
+      "UMi" : "Ursa Minor",
+      "Vel" : "Vela",
+      "Vir" : "Virgo",
+      "Vol" : "Volans",
+      "Vul" : "Vulpecula",
+   };
+   return (constelltionLongNameLookup[constellationShort]);
+}
+
+
+// The following below will be the description of this script when viewed in the Configuration window (under the "Scripts" section) of Stellarium.
+function scriptDescription () {
+   // Name: Messier Marathon Simulation
+   // Author: Randy
+   // License: Public Domain
+   // Version: 1.1
+   // Description: This script can be a very helpful tool to prepare yourself for a Messier Marathon
+   // - the challenge of finding all 110 Messier objects in a single night and into the morning.
+   // When you have decided on the best possible order of finding each Messier object,
+   // update the script code with your order, the date of the marathon and a few other variables.
+   // Then, running this script will do three important things for you:
+   // <br><br>
+   // 1. Simulate the entire observation night of finding all the Messier objects.
+   // <br>
+   // 2. Provide useful general information of your particular Messier Marathon.
+   // <br>
+   // 3. Provide a very helpful time schedule in a CSV format of when to find each Messier object.
+   // <br><br>
+   // Note that to see the general information and time schedule,
+   // the script should be ran in the Script Console by pressing the <b>[F12]</b> key while in Stellarium.
+   // <br><br>
+   // As an added bonus, it is possible for this script to also output the
+   // general information and time schedule to both a TXT and a CSV text file (respectively)
+   // by editing the '<i>saveToOutputFiles</i>' variable in the script code.
+   // <br><br>
+   // The observation date is currently set to 2026-March-18,
+   // but the date can be set to any date by changing the '<i>marathonDate</i>' variable near the top of the script code.
+   // <br><br>
+   // Initially released on Stellarium 25.4
+   // <br><br>
+   // Find thorough instructions here:
+   // <br>
+   // https://github.com/StellariumScripts/stellarium-messier-marathon
+}
