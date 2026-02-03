@@ -95,7 +95,7 @@ The following instructions below are ideal for those who are more of a novice wi
 * Play the script:
    - Click the ![Play button](images/play_button.png) icon near the top-right of the Script Console window.
 * The entire Script Console window may be closed now while the script is running:
-   - Click the :heavy_multiplication_x: in the top-right of the Script Console window.
+   - Click the ![Close button](images/close_button.png) in the top-right of the Script Console window.
 * It may take several minutes for the entire script to finish.
 
 ### When The Script Finishes
@@ -282,7 +282,7 @@ For further help with CSV files, here is one of many [CSV tutorials](https://tad
 
 The most likely cause of this issue is due to an incorrect setting with the time zone in Stellarium. After choosing the location in Stellarium where the Messier Marathon will take place, make note of the UTC time offset at the very bottom of the Stellarium program.
 
-![Check UTC timezone](https://github.com/Austin-RR/stellarium-messier-marathon/blob/main/images/utc.png)
+![Check UTC timezone](images/utc.png)
 
 Ensure the UTC offset is correct for both that location and date (is Daylight Saving in effect?).  If the UTC time offset is not correct, it is quite possible a custom time zone has been incorrectly set in Stellarium's "Location" settings.  If a custom time zone is set, also be sure to be aware of any possible Daylight Saving effect.
 <br>
