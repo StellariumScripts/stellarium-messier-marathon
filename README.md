@@ -2,17 +2,25 @@
 
 This project provides you with a script that can be easily run in Stellarium to help simulate and plan for an upcoming Messier Marathon challenge!
 
-In addition, this script will provide helpful information specific to your marathon, including a much-needed customized time schedule of the exact time when to be looking for each individual Messier object.
+In addition, this script will provide helpful information specific to your marathon, including a much-needed customized time schedule of the exact time when to be looking for each individual Messier object. Stellarium will create this time schedule in the form of a CSV text file that can be opened in any spreadsheet program.
 
 There are other Messier Marathon scripts for Stellarium out there on the internet - including one that is already included with Stellarium.  However, this script is specifically designed to help you plan and accomplish your very own specific Messier Marathon!
 
 If you already have a good idea of the order of finding each of the 110 Messier objects prior to using this script, running this Stellarium script may also help you to refine your order.
 
 While the main audience for this script is for astronomers who wish to complete a Messier Marathon without the aide of any type of computerized telescope, anyone is welcome to experiment with this script!
-
+<br>
+<br>
+<br>
 Here is a brief example of what this script looks like in Stellarium:
 
 ![Brief example of what this script looks like in Stellarium](images/stellarium.gif)
+<br>
+<br>
+<br>
+Here is a small example of what the CSV output file looks like in a spreadsheet program:
+
+![Brief example of what this script looks like in Stellarium](images/csv.png)
 
 ---
 
@@ -69,9 +77,9 @@ The most ideal night of a Messier Marathon will usually fall around the last two
 
 The location of where a Messier Marathon will take place is very important. The most ideal location on Earth may have a latitude between 12°N to 26°N. However, a latitude within the range of 8°N to 36°N may also provide a decent opportunity for a successful marathon. Any marathon location with a latitude outside of 4°N to 40°N will not have any realistic chance for a successful marathon. An excellent view of the horizon to both the East and West (and possibly to the South) will also be necessary. The location should also be free from [light pollution](https://lightpollutionmap.app/) as much as possible. A [Bortle Class](https://telescope.live/blog/bortle-scale) 4 sky may be adequate depending on the latitude and elevation of the location, the size and quality of your telescope and the current seeing conditions.  All of these factors come into play in determining your chance of successfully completing a Messier Marathon.
 
-During the marathon, a log should be used to make notes of every Messier object discovery.
+During the marathon, a log should be used to make notes of every Messier object discovery (or failed discovery). In particular, the time of each discovery should be noted.
 
-It is very important to know that a good amount of planning and practice will be necessary prior to attempting a Messier Marathon. This Stellarium script can help with some of the planning. It is also strongly advisable to attempt a few "Messier Mini-Marathons" throughout the year to get acquainted with finding all of the Messier objects. Good luck!
+It is very important to know that a good amount of planning and practice will be necessary prior to attempting a Messier Marathon. This Stellarium script can help with some of the planning. It is also strongly advisable to attempt a few "Messier Mini-Marathons" throughout the year to get acquainted with finding all of the Messier objects. **Good luck**!
 <br>
 <br>
 
@@ -119,13 +127,13 @@ A further option is to have the script automatically save the final output to tw
 
 ### Final Steps
 
-If any edits to the script have been made to your liking in the Script Console window, it is best to make those same edits to the downloaded SSC script file.  Any future execution of the script will no longer have to be manually edited in the Script Console window as the edits would already be present in the SSC script file.
+If any edits to the script have been made to your liking in the Script Console window, it is best to make those same edits to the downloaded `messier_marathon_simulation.ssc` SSC script file.  Any future execution of the script will no longer have to be manually edited in the Script Console window as the edits would already be present in the `messier_marathon_simulation.ssc` SSC script file.
 <br>
 <br>
 
 # Editing the Script Variables
 
-While the script can be run successfully without any edits to the script, you will actually need to make some edits to the script to customize it for your particular Messier Marathon. Near the top of the script are a few variables that will need to be edited. While the edits may be made directly within the Script Console window, those same edits should be made later to the SSC script file itself. The following will describe each of these variables and how they may be edited.
+While the script can be run successfully without any edits to the script, you will actually need to make some edits to the `messier_marathon_simulation.ssc` SSC script file to customize it for your particular Messier Marathon. Near the top of the script are a few variables that will need to be edited. While the edits may be made directly within the Script Console window, those same edits should be made later to the `messier_marathon_simulation.ssc` SSC script file itself. The following will describe each of these variables and how they may be edited.
 
 ---
 
@@ -267,7 +275,7 @@ If you set the `saveToOutputFiles` variable in the script to `yes`, then the scr
 
 One of the files is a TXT file (with a `.txt` file extension) that contains all of the same exact information in the "Output" tab of the Script Console once the script has finished.
 
-The other file is a CSV file (with a `.csv` file extension) . This CSV file will simply contain the bottom portion of the output in the TXT file. CSV files can be inherently opened by any spreadsheet program such as Microsoft Excel, LibreOffice Calc, Google Sheets or even an [online CSV viewer](https://codebeautify.org/csv-viewer). When the CSV file has been opened in a spreadsheet program, you will have nicely organized data in tabular form in rows and columns.  More importantly, this CSV data provides the very useful time schedule that will help you stay on schedule during the entire Messier Marathon.
+The other file is a CSV file (with a `.csv` file extension) . This CSV file will simply contain the bottom portion of the output in the TXT file. CSV files can be inherently opened by any spreadsheet program such as Microsoft Excel, LibreOffice Calc, Google Sheets or even an [online CSV viewer](https://edit-csv.net/). When the CSV file has been opened in a spreadsheet program, you will have nicely organized data in tabular form in rows and columns.  More importantly, this CSV data provides the very useful time schedule that will help you stay on schedule during the entire Messier Marathon.
 
 A few notes regarding the CSV file:
 * When the CSV file is opened in a spreadsheet program, a few of the columns may be deemed to not be necessary.  Simply delete those columns.
@@ -311,7 +319,7 @@ A Messier Mini-Marathon does not even have to take an entire night. Begin practi
 
 No. Absolutely not! It can actually be quite challenging to determine an order that could even be considered close to perfect. This is especially true for the Messier objects close to the horizon near sunset and sunrise. While the default order included with this script may provide a decent start, it should be up to you to find a order that suits you best. Continually change the order of the Messier objects in this script to test your own order and determine if it is ideal for you.
 
-Some factors in deciding the order may include the date and location of your Messier Marathon in addition to your level of comfort in finding particular Messier objects.
+Some factors in deciding the order may include the date and location of your Messier Marathon in addition to your level of comfort in finding particular Messier objects. Also feel free to change the order of the Messier Objects in the `MyMessierList` variable so that fewer Messier objects will be observed near zenith. This is helpful as finding objects near zenith can be cumbersome - especially with a Dobsonian telescope.
 
 A large component of the fun that goes into a Messier Marathon is determining your own sequence of Messier objects to find.
 <br>
@@ -319,7 +327,7 @@ A large component of the fun that goes into a Messier Marathon is determining yo
 
 ## Can I configure the script to my own tastes?
 
-Yes. Feel free to make edits to the script.  The script is commented fairly well. A little bit of common sense may even help to understand what a particular line of code is doing.  Do not worry.  Editing the script will not "damage" your Stellarium program. If Stellarium is ever in a state of confusion, simply restart Stellarium.
+Yes. Feel free to make edits to the `messier_marathon_simulation.ssc` SSC script file.  The script is commented fairly well. A little bit of common sense may even help to understand what a particular line of code is doing.  Do not worry.  Editing the script will not "damage" your Stellarium program. If Stellarium is ever in a state of confusion, simply restart Stellarium.
 <br>
 <br>
 
@@ -331,13 +339,13 @@ Yes. Despite the emphasis of using this script for Messier objects, essentially 
 
 ## What programming language is used in this script?
 
-The programming language used in this script is called [JavaScript](https://www.w3schools.com/js/). Edits to the script can be done and saved in Stellarium's Script Console window. However, if wanting to make edits to the script outside of the Stellarium program, a good suggestion would be to open the SSC script file with [Notepad++](https://notepad-plus-plus.org/) (or a similar type of advanced text editor).  After the SSC script file is opened with Notepad++, in the top menu of Notepad++ select:
+The programming language used in this `messier_marathon_simulation.ssc` SSC script file is called [JavaScript](https://www.w3schools.com/js/). Edits to the script can be done and saved in Stellarium's Script Console window. However, if wanting to make edits to the script outside of the Stellarium program, a good suggestion would be to open the `messier_marathon_simulation.ssc` SSC script file with [Notepad++](https://notepad-plus-plus.org/) (or a similar type of advanced text editor).  After the `messier_marathon_simulation.ssc` SSC script file is opened with Notepad++, in the top menu of Notepad++ select:
 
 > **Language** ![Right arrow](images/right_arrow.png) **J** ![Right arrow](images/right_arrow.png) **JavaScript**
 <br>
 
 ## Are there any secrets in the script?
-Yes! Take a look around in the script for a few undocumented variables you may wish to use.
+Yes! Take a look around in the `messier_marathon_simulation.ssc` SSC script file for a few undocumented variables you may wish to use.
 <br>
 <br>
 
@@ -367,6 +375,5 @@ This script was first publicly released when Stellarium 25.4 was the latest stab
 
 ## Need some help or see an issue? You may [ask a question](https://github.com/StellariumScripts/stellarium-messier-marathon/discussions) or [submit an issue](https://github.com/StellariumScripts/stellarium-messier-marathon/issues).
 <br>
-
 ---
 ---
