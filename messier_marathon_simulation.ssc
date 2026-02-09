@@ -731,7 +731,7 @@ for (messierIndex=0; messierIndex<MyMessierList.length; messierIndex++) {
    messierDECminute     = Math.floor(messierDECpercentage * 60);
    messierDECsecond     = forceDecimal(((messierDECpercentage * 60) - messierDECminute) * 60,1);
    messierDECdms        = messierDECdegree + "°" + messierDECminute.toString().padStart(2,"0") + "'" + messierDECsecond.toString().padStart(messierDECsecond.length+2-messierDECsecond.indexOf("."),"0") + "\"";
-   sunAltitude          = forceDecimal(core.getObjectInfo("Sun").altitude,1);
+   sunAltitude          = forceDecimal(core.getObjectInfo("Sun").altitude,1) + "°";
 
 
    // For sake of the log output, calculate duration of the Messier object search in minutes & seconds.
@@ -1239,7 +1239,7 @@ function scriptDescription () {
    // Name: Messier Marathon Simulation
    // Author: Randy
    // License: Public Domain
-   // Version: 1.1
+   // Version: 1.2
    // Description: This script can be a very helpful tool to prepare yourself for a Messier Marathon
    // - the challenge of finding all 110 Messier objects in a single night and into the morning.
    // When you have decided on the best possible order of finding each Messier object,
