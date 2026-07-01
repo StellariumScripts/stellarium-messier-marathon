@@ -1,7 +1,7 @@
 scriptDescription();  // This displays the description of this script in Stellarium's Configuration window. (This must come before any other line below.)
 
 
-var marathonDate = "2026-03-18";  // This date (YYYY-MM-DD) is the night the marathon starts and will continue on to the following early morning hours.
+var marathonDate = "2027-03-07";  // This date (YYYY-MM-DD) is the night the marathon starts and will continue on to the following early morning hours.
 var sunSetAlt  = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunset before considering it dark enough to start the marathon.  (Must be a negative value.)
 var sunRiseAlt = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunrise before considering it too bright to continue the marathon.  (Must be a negative value.)
 var waitSecondsBetweenSelections = 1.5;  // Length of real time (in seconds) the script should spend in between selections of Messier objects.  (A larger value will have the simulation run at a slower rate.)
@@ -1239,7 +1239,7 @@ function scriptDescription () {
    // Name: Messier Marathon Simulation
    // Author: Randy
    // License: Public Domain
-   // Version: 1.2
+   // Version: 1.3
    // Description: This script can be a very helpful tool to prepare yourself for a Messier Marathon
    // - the challenge of finding all 110 Messier objects in a single night and into the morning.
    // When you have decided on the best possible order of finding each Messier object,
