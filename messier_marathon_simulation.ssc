@@ -1,19 +1,20 @@
 scriptDescription();  // This displays the description of this script in Stellarium's Configuration window. (This must come before any other line below.)
 
 
-var marathonDate = "2027-03-07";  // This date (YYYY-MM-DD) is the night the marathon starts and will continue on to the following early morning hours.
-var sunSetAlt  = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunset before considering it dark enough to start the marathon.  (Must be a negative value.)
-var sunRiseAlt = -12.0;  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunrise before considering it too bright to continue the marathon.  (Must be a negative value.)
+var marathonDate = "2027-03-07";         // This date (YYYY-MM-DD) is the night the marathon starts and will continue on to the following early morning hours.
+var sunSetAlt  = -12.0;                  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunset before considering it dark enough to start the marathon.  (Must be a negative value.)
+var sunRiseAlt = -12.0;                  // Define how low the Sun's altitude must be (in degrees) below the horizon at sunrise before considering it too bright to continue the marathon.  (Must be a negative value.)
+var keepLandscape = "no";                // Use "yes" to keep the current landscape displayed prior to the start of the script.  Use "no" to remove the current landscape and use a generic landscape.  (May be best to keep this as "no".)
 var waitSecondsBetweenSelections = 1.5;  // Length of real time (in seconds) the script should spend in between selections of Messier objects.  (A larger value will have the simulation run at a slower rate.)
-var saveToOutputFiles = "no";  // At the conclusion of the script, it is possible to save the output to two files in the user directory.  (Default is 'no'. Otherwise, use 'yes' to save to the files.)
-                               // The two files will be a TXT file with the entire output information and a CSV file with just a portion of the TXT file to provide a convenient schedule.
+var saveToOutputFiles = "no";            // At the conclusion of the script, it is possible to save the output to two files in the user directory.  (Default is 'no'. Otherwise, use 'yes' to save to the files.)
+                                         // The two files will be a TXT file with the entire output information and a CSV file with just a portion of the TXT file to provide a convenient schedule.
 
 // This is the user-defined order of finding each Messier object. (Change the order as desired.)
 const MyMessierList = [
    "M74",
-   "M110",
-   "M32",
    "M31",
+   "M32",
+   "M110",
    "M33",
    "M77",
    "M76",
@@ -256,9 +257,9 @@ const MessierChartNum = {
    "M3"   : "44",
    "M4"   : "56",
    "M5"   : "55",
-   "M6"   : "69",
-   "M7"   : "69",
-   "M8"   : "67",
+   "M6"   : "69 (J)",
+   "M7"   : "69 (J)",
+   "M8"   : "67 (I)",
    "M9"   : "56",
    "M10"  : "56",
    "M11"  : "67",
@@ -266,19 +267,19 @@ const MessierChartNum = {
    "M13"  : "52",
    "M14"  : "54",
    "M15"  : "75",
-   "M16"  : "67",
-   "M17"  : "67",
-   "M18"  : "67",
+   "M16"  : "67 (I)",
+   "M17"  : "67 (I)",
+   "M18"  : "67 (I)",
    "M19"  : "56",
-   "M20"  : "67",
-   "M21"  : "67",
-   "M22"  : "67",
-   "M23"  : "67",
-   "M24"  : "67",
-   "M25"  : "67",
+   "M20"  : "67 (I)",
+   "M21"  : "67 (I)",
+   "M22"  : "67 (I)",
+   "M23"  : "67 (I)",
+   "M24"  : "67 (I)",
+   "M25"  : "67 (I)",
    "M26"  : "67",
    "M27"  : "64",
-   "M28"  : "67",
+   "M28"  : "67 (I)",
    "M29"  : "62",
    "M30"  : "77",
    "M31"  : "3",
@@ -290,16 +291,16 @@ const MessierChartNum = {
    "M37"  : "12",
    "M38"  : "12",
    "M39"  : "73",
-   "M40"  : "43",
+   "M40"  : "43 (F)",
    "M41"  : "27",
-   "M42"  : "16",
-   "M43"  : "16",
+   "M42"  : "16 (B)",
+   "M43"  : "16 (B)",
    "M44"  : "24",
-   "M45"  : "15",
+   "M45"  : "15 (A)",
    "M46"  : "27",
    "M47"  : "27",
    "M48"  : "26",
-   "M49"  : "45",
+   "M49"  : "45 (C)",
    "M50"  : "27",
    "M51"  : "43",
    "M52"  : "72",
@@ -308,15 +309,15 @@ const MessierChartNum = {
    "M55"  : "66",
    "M56"  : "63",
    "M57"  : "63",
-   "M58"  : "45",
-   "M59"  : "45",
-   "M60"  : "45",
+   "M58"  : "45 (C)",
+   "M59"  : "45 (C)",
+   "M60"  : "45 (C)",
    "M61"  : "45",
    "M62"  : "56",
    "M63"  : "43",
    "M64"  : "45",
-   "M65"  : "34",
-   "M66"  : "34",
+   "M65"  : "34 (G)",
+   "M66"  : "34 (G)",
    "M67"  : "24",
    "M68"  : "47",
    "M69"  : "67",
@@ -334,23 +335,23 @@ const MessierChartNum = {
    "M81"  : "31",
    "M82"  : "31",
    "M83"  : "47",
-   "M84"  : "45",
-   "M85"  : "45",
-   "M86"  : "45",
-   "M87"  : "45",
-   "M88"  : "45",
-   "M89"  : "45",
-   "M90"  : "45",
-   "M91"  : "45",
+   "M84"  : "45 (C)",
+   "M85"  : "45 (C)",
+   "M86"  : "45 (C)",
+   "M87"  : "45 (C)",
+   "M88"  : "45 (C)",
+   "M89"  : "45 (C)",
+   "M90"  : "45 (C)",
+   "M91"  : "45 (C)",
    "M92"  : "52",
    "M93"  : "26",
    "M94"  : "43",
    "M95"  : "34",
    "M96"  : "34",
-   "M97"  : "43",
-   "M98"  : "45",
-   "M99"  : "45",
-   "M100" : "45",
+   "M97"  : "43 (F)",
+   "M98"  : "45 (C)",
+   "M99"  : "45 (C)",
+   "M100" : "45 (C)",
    "M101" : "53",
    "M102" : "53",
    "M103" : "1",
@@ -358,8 +359,8 @@ const MessierChartNum = {
    "M105" : "34",
    "M106" : "43",
    "M107" : "56",
-   "M108" : "43",
-   "M109" : "43",
+   "M108" : "43 (F)",
+   "M109" : "43 (F)",
    "M110" : "3",
 };
 
@@ -427,11 +428,24 @@ const moveAltAzPeriodic = [
 if (!/^\d{4}-\d{2}-\d{2}$/.test(marathonDate)) { core.debug("ERROR: 'marathonDate' variable has an invalid value of: " + marathonDate);  core.exit(); }
 if (!/^-\d+\.?\d*$/.test(sunSetAlt))  { core.debug("ERROR: 'sunSetAlt' variable has an invalid value of: "  + sunSetAlt);  core.exit(); }
 if (!/^-\d+\.?\d*$/.test(sunRiseAlt)) { core.debug("ERROR: 'sunRiseAlt' variable has an invalid value of: " + sunRiseAlt); core.exit(); }
+if (!/^\s*yes\s*$/i.test(keepLandscape) && !/^\s*no\s*$/i.test(keepLandscape)) {
+   core.debug("ERROR: 'keepLandscape' variable has an invalid value of: " + keepLandscape); core.exit();
+}
 if (isNaN(waitSecondsBetweenSelections) || waitSecondsBetweenSelections <= 0) {
    core.debug("ERROR: 'waitSecondsBetweenSelections' variable has an invalid value of: " + waitSecondsBetweenSelections); core.exit();
 }
 if (!/^\s*yes\s*$/i.test(saveToOutputFiles) && !/^\s*no\s*$/i.test(saveToOutputFiles)) {
    core.debug("ERROR: 'saveToOutputFiles' variable has an invalid value of: " + saveToOutputFiles); core.exit();
+}
+
+
+// Check if the MyMessierList list contains any duplicate values and print the duplicate objects in the Debug window.
+if (new Set(MyMessierList).size !== MyMessierList.length) {
+   core.debug("ERROR:  The following Messier object(s) are duplicated in the 'MyMessierList' list:");
+   var duplicates = MyMessierList.filter((item, index) => MyMessierList.indexOf(item) !== index);
+   var uniqueDuplicates = [...new Set(duplicates)];
+   core.debug(uniqueDuplicates.sort());
+   core.exit();
 }
 
 
@@ -626,8 +640,13 @@ GridLinesMgr.setFlagAzimuthalGrid(true);
 GridLinesMgr.setFlagHorizonLine(true);
 GridLinesMgr.setFlagMeridianLine(true);
 LandscapeMgr.setFlagCardinalPoints(true);
-LandscapeMgr.setCurrentLandscapeName("Zero Horizon",5);
-LandscapeMgr.setFlagLandscape(true);
+// User has the option to keep displaying whatever landscape was in use prior to starting this script.
+if (/^\s*yes\s*$/i.test(keepLandscape)) {
+   LandscapeMgr.setFlagLandscape(true);
+} else {
+   LandscapeMgr.setCurrentLandscapeName("Zero Horizon",5);
+   LandscapeMgr.setFlagLandscape(true);
+}
 LandscapeMgr.setPolyLineThickness(0);  // Starting in 24.4, an annoying red line appears at the horizon.  So, eliminate the horizon line.
 core.moveToAltAzi(30,270,5);
 StelMovementMgr.zoomTo(100,5);
@@ -657,7 +676,7 @@ core.wait(3);
 
 // Create header row for CSV data output.
 textOutput("---------------- CSV ----------------", "header");
-textOutput("Order,Time,Messier,Azimuth,Altitude,RA(hms),DEC(dms),RA(dec),DEC(dec),Type(long),Type(short),Constellation(long),Constellation(short),Sun Alt,Duration,Chart", "csv");
+textOutput("Order,Time,Messier,Azimuth,Altitude,RA-J2000(hms),DEC-J2000(dms),RA-J2000(dec),DEC-J2000(dec),Type(long),Type(short),Constellation(long),Constellation(short),Sun Alt,Duration,Chart", "csv");
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -717,21 +736,29 @@ for (messierIndex=0; messierIndex<MyMessierList.length; messierIndex++) {
    // For sake of the log output, get altitude & azimuth of the Messier object now - at the moment of first selecting it.  Also get other object information.
    messierAz  = forceDecimal(core.getObjectInfo(selectedMessier).azimuth,1);
    messierAlt = forceDecimal(core.getObjectInfo(selectedMessier).altitude,1);
-   if (core.getObjectInfo(selectedMessier).ra < 0) { messierRAFloat = 360 + core.getObjectInfo(selectedMessier).ra; }
-      else {                                         messierRAFloat = core.getObjectInfo(selectedMessier).ra; }
-   messierRAhour         = Math.floor(messierRAFloat / 15);
-   messierRAminutesFloat = ((messierRAFloat - (messierRAhour * 15)) / 15) * 60;
-   messierRAminutes      = Math.floor(messierRAminutesFloat);
-   messierRAseconds      = forceDecimal((messierRAminutesFloat - messierRAminutes) * 60,2);
-   messierRAhms          = Math.abs(messierRAhour) + "h" + messierRAminutes.toString().padStart(2,"0") + "m" + messierRAseconds.toString().padStart(messierRAseconds.length+2-messierRAseconds.indexOf("."),"0") + "s";
-   messierDECfloat       = core.getObjectInfo(selectedMessier).dec;
+   if (core.getObjectInfo(selectedMessier).raJ2000 < 0) { messierRAFloat = 360 + core.getObjectInfo(selectedMessier).raJ2000; }
+      else {                                              messierRAFloat = core.getObjectInfo(selectedMessier).raJ2000; }
+   messierRAhour          = Math.floor(messierRAFloat / 15);
+   messierRAminutesFloat  = ((messierRAFloat - (messierRAhour * 15)) / 15) * 60;
+   messierRAminutes       = Math.floor(messierRAminutesFloat);
+   secondsRADecimalPlaces = 2;  // Number of decimal places for the seconds value in the RA(HMS) output.  (Integer >= 0)
+   messierRAseconds       = forceDecimal((messierRAminutesFloat - messierRAminutes) * 60,secondsRADecimalPlaces);
+   const [integerPartRA, decimalPartRA] = messierRAseconds.split('.');  // This line and next 2 are just to make sure the seconds integer is padded with a zero.
+   paddedInteger                        = integerPartRA.padStart(2,'0');
+   messierRAseconds                     = decimalPartRA ? `${paddedInteger}.${decimalPartRA}` : paddedInteger;
+   messierRAhms            = Math.abs(messierRAhour) + "h" + messierRAminutes.toString().padStart(2,'0') + "m" + messierRAseconds + "s";
+   messierDECfloat         = core.getObjectInfo(selectedMessier).decJ2000;
    if (messierDECfloat < 0) { messierDECdegree = 1 + Math.floor(messierDECfloat); }
       else {                  messierDECdegree = Math.floor(messierDECfloat); }
-   messierDECpercentage = Math.abs(messierDECfloat-messierDECdegree);
-   messierDECminute     = Math.floor(messierDECpercentage * 60);
-   messierDECsecond     = forceDecimal(((messierDECpercentage * 60) - messierDECminute) * 60,1);
-   messierDECdms        = messierDECdegree + "°" + messierDECminute.toString().padStart(2,"0") + "'" + messierDECsecond.toString().padStart(messierDECsecond.length+2-messierDECsecond.indexOf("."),"0") + "\"";
-   sunAltitude          = forceDecimal(core.getObjectInfo("Sun").altitude,1) + "°";
+   messierDECpercentage    = Math.abs(messierDECfloat-messierDECdegree);
+   messierDECminute        = Math.floor(messierDECpercentage * 60);
+   secondsDECDecimalPlaces = 1;  // Number of decimal places for the seconds value in the DEC(DMS) output.  (Integer >= 0)
+   messierDECsecond        = forceDecimal(((messierDECpercentage * 60) - messierDECminute) * 60,secondsDECDecimalPlaces);
+   const [integerPartDEC, decimalPartDEC] = messierDECsecond.split('.');  // This line and next 2 are just to make sure the seconds integer is padded with a zero.
+   paddedInteger                          = integerPartDEC.padStart(2,'0');
+   messierDECsecond                       = decimalPartDEC ? `${paddedInteger}.${decimalPartDEC}` : paddedInteger;
+   messierDECdms           = messierDECdegree + "°" + messierDECminute.toString().padStart(2,'0') + "'" + messierDECsecond + "\"";
+   sunAltitude             = forceDecimal(core.getObjectInfo("Sun").altitude,1) + "°";
 
 
    // For sake of the log output, calculate duration of the Messier object search in minutes & seconds.
@@ -745,6 +772,8 @@ for (messierIndex=0; messierIndex<MyMessierList.length; messierIndex++) {
 
 
    // Log output to the Script Console (if running this script from the Script Console).
+   floatingRAprecistion = 6;  // Number of decimal places for the RA floating value (Integer >= 0)
+   floatingDECprecision = 6;  // Number of decimal places for the DEC floating value (Integer >= 0)
    textOutput(sequenceNumber + "," +
               observationHourMinuteLog + "," +
               selectedMessier + "," +
@@ -752,8 +781,8 @@ for (messierIndex=0; messierIndex<MyMessierList.length; messierIndex++) {
               messierAlt + "°," +
               messierRAhms + "," +
               messierDECdms + "," +
-              forceDecimal(messierRAFloat,3) + "°," +
-              forceDecimal(messierDECfloat,3) + "°," +
+              forceDecimal(messierRAFloat,floatingRAprecistion) + "°," +
+              forceDecimal(messierDECfloat,floatingDECprecision) + "°," +
               messierGetType(selectedMessier) + "," +
               typeInitials(messierGetType(selectedMessier,"typelong")) + "," +
               constellationLongName(core.getObjectInfo(selectedMessier).iauConstellation) + "," +
@@ -860,20 +889,26 @@ function textOutput (textString, destination) {
 }
 
 
-// Force decimal value to appear with a certain precision and return the number value as a string.
-function forceDecimal (input, precision) {  // 'precision' must be a whole number greater than 0.
+// Force decimal value to appear with a certain length of precision and return the number value as a string.
+function forceDecimal (input, precision) {  // 'precision' must be a whole number greater than or equal to 0.
+   if (!Number.isInteger(precision) || Math.trunc(precision) < 0) {
+      core.debug("ERROR: 'forceDecimal' function was given an invalid precision value of: " + precision); core.exit();
+   }
+
    var inputString     = String(input);
-   var precisionNumber = Number(precision);
+   var precisionNumber = Math.trunc(Number(precision));
 
-   if ( precisionNumber < 1 ) { return (inputString); }
-
-   var decimalMoved = ( Number(inputString) * Math.pow(10,precisionNumber) ).toString();
-   if (decimalMoved.includes("-") && decimalMoved.includes(".5")) { decimalMoved = decimalMoved.replace(".5",".0"); }  // A negative decimal number rounds up (closer to zero).
-   var rounded = ( (Math.round(decimalMoved)) / Math.pow(10,precisionNumber) ).toString();
-   if ( !rounded.includes(".") ) { rounded = rounded + ".0";  }
-   var padValue = rounded.toString().indexOf(".") + precisionNumber + 1;
-   var returnValue = rounded.padEnd(padValue,"0");
-   return (returnValue);
+   if ( precisionNumber == 0 ) {
+      return (Math.round(inputString).toString());
+   } else {
+      var decimalMoved = ( Number(inputString) * Math.pow(10,precisionNumber) ).toString();
+      if (decimalMoved.includes("-") && decimalMoved.includes(".5")) { decimalMoved = decimalMoved.replace(".5",".0"); }  // A negative decimal number rounds up (closer to zero).
+      var rounded = ( (Math.round(decimalMoved)) / Math.pow(10,precisionNumber) ).toString();
+      if ( !rounded.includes(".") ) { rounded = rounded + ".0";  }
+      var padValue = rounded.toString().indexOf(".") + precisionNumber + 1;
+      var returnValue = rounded.padEnd(padValue,'0');
+      return (returnValue);
+   }
 }
 
 
@@ -1239,7 +1274,7 @@ function scriptDescription () {
    // Name: Messier Marathon Simulation
    // Author: Randy
    // License: Public Domain
-   // Version: 1.3
+   // Version: 1.4
    // Description: This script can be a very helpful tool to prepare yourself for a Messier Marathon
    // - the challenge of finding all 110 Messier objects in a single night and into the morning.
    // When you have decided on the best possible order of finding each Messier object,
@@ -1259,7 +1294,7 @@ function scriptDescription () {
    // general information and time schedule to both a TXT and a CSV text file (respectively)
    // by editing the '<i>saveToOutputFiles</i>' variable in the script code.
    // <br><br>
-   // The observation date is currently set to 2026-March-18,
+   // The observation date is currently set to 2027-March-07,
    // but the date can be set to any date by changing the '<i>marathonDate</i>' variable near the top of the script code.
    // <br><br>
    // Initially released on Stellarium 25.4
