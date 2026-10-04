@@ -1,14 +1,16 @@
 # Stellarium Messier Marathon Script
 
-This project provides you with a script that can be easily run in Stellarium to help simulate and plan for an upcoming Messier Marathon challenge!
+This project provides you with a script that can be easily run in Stellarium to help you plan and simulate your very own Messier Marathon challenge!
 
-In addition, this script will provide helpful information specific to your marathon, including a much-needed customized time schedule of the exact time when to be looking for each individual Messier object. Stellarium will create this time schedule in the form of a CSV text file that can be opened in any spreadsheet program.
+There are other Messier Marathon scripts for Stellarium out there on the internet - including one already in Stellarium. Unfortunately, the majority of them simply give a generic tour of the Messier objects. This script is unique because it is designed to help you plan and accomplish your very own specific Messier Marathon by allowing you to provide the script with details of your own Messier Marathon.
 
-There are other Messier Marathon scripts for Stellarium out there on the internet - including one that is already included with Stellarium.  However, this script is specifically designed to help you plan and accomplish your very own specific Messier Marathon!
+This script will also provide helpful information specific to your marathon, including a much-needed time schedule of exactly when to find each individual Messier object. The time schedule will be customized for your exact location and date of the marathon and for your particular order of finding every Messier object.  This script can have Stellarium create the time schedule in the form of a CSV text file that can be opened in any spreadsheet program and then printed out.
+
+Simply change a few variables in the script (clear and simple instructions are given below), and the script will now be customized for your Messier Marathon.
 
 If you already have a good idea of the order of finding each of the 110 Messier objects prior to using this script, running this Stellarium script may also help you to refine your order.
 
-While the main audience for this script is for astronomers who wish to complete a Messier Marathon without the aide of any type of computerized telescope, anyone is welcome to experiment with this script!
+While the main audience for this script is for astronomers who wish to complete a Messier Marathon without the aid of any type of computerized telescope, anyone is welcome to experiment with this script!
 <br>
 <br>
 <br>
@@ -36,16 +38,17 @@ Here is a small example of what the Stellarium CSV output file looks like in a s
     * [When The Script Finishes](#when-the-script-finishes)
     * [Optional](#optional)
     * [Additional Option](#additional-option)
-    * [Final Steps](#final-steps)
+    * [Final Step](#final-step)
 * Editing the Script Variables
     * [marathonDate](#1-marathondate)
     * [sunSetAlt](#2-sunsetalt)
     * [sunRiseAlt](#3-sunrisealt)
-    * [waitSecondsBetweenSelections](#4-waitsecondsbetweenselections)
-    * [saveToOutputFiles](#5-savetooutputfiles)
-    * [MyMessierList](#6-mymessierlist)
-    * [MinutesDurations](#7-minutesdurations)
-    * [MessierChartNum](#8-messierchartnum)
+    * [keepLandscape](#4-keeplandscape)
+    * [waitSecondsBetweenSelections](#5-waitsecondsbetweenselections)
+    * [saveToOutputFiles](#6-savetooutputfiles)
+    * [MyMessierList](#7-mymessierlist)
+    * [MinutesDurations](#8-minutesdurations)
+    * [MessierChartNum](#9-messierchartnum)
 * FAQ
     * [What limitations are there with the sunset and sunrise altitude variables?](#what-limitations-are-there-with-the-sunset-and-sunrise-altitude-variables)
     * [Can I regain the GUI while the script is running?](#can-i-regain-the-gui-while-the-script-is-running)
@@ -67,23 +70,25 @@ Here is a small example of what the Stellarium CSV output file looks like in a s
 
 # Background Information
 
-[Charles Messier](https://science.nasa.gov/people/explore-the-night-sky-hubbleatms-messier-catalog-bio/), a French astronomer in the latter half of the 1700's, was fascinated about discovering comets.  Occasionally, he would come across various dimly illuminated patches in the night sky while looking through his telescope. After further studying these patches, he would determine these patches were not comets, but rather some other type of object.  He made note of these particular objects in a catalog to avoid observing these non-comet objects again.
+[Charles Messier](https://science.nasa.gov/people/explore-the-night-sky-hubbleatms-messier-catalog-bio/), a French astronomer in the latter half of the 1700s, was fascinated with discovering comets.  Occasionally, he would come across various dimly illuminated patches in the night sky while looking through his telescope. After further studying these patches, he would determine these patches were not comets, but rather some other type of object.  He made note of these particular objects in a catalog to avoid observing these non-comet objects again.
 
-There are 110 objects in the [Messier Catalog](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/) designated _M1_ to _M110_.
+There are 110 objects in the [Messier Catalog](https://astropixels.com/messier/messiergallery.html) designated _M1_ to _M110_.
 
-Fast forward to the 20th century, and amateur astronomers took Messier's catalog to heart.  Although there have been a vast number of other catalogs created since Messier's, amateur astronomers developed a particular fascination with Messier's catalog. Messier's objects tend to be some of the more brighter and impressive deep sky objects in the northern hemisphere.
+Fast-forward to the 20th century, and amateur astronomers took Messier's catalog to heart.  Although there have been a vast number of other catalogs created since Messier's, amateur astronomers developed a particular fascination with Messier's catalog. Messier's objects tend to be some of the more brighter and impressive deep sky objects in the northern hemisphere.
 
 At some point in time, it was discovered that it may be possible to see all 110 of Messier's objects in a single night - the _entire_ night from sunset to sunrise. This challenge became known as the [Messier Marathon](https://www.celestron.com/blogs/knowledgebase/the-ultimate-guide-to-conquering-the-messier-marathon).
 
-The most ideal night of a Messier Marathon will usually fall around March 15th to the 25th. However, it is necessary to take the [phase of the Moon](https://moonphases.co.uk/moon-calendar) into account as you should really only attempt the marathon during a new moon phase. Therefore, the particular date of the new moon phase around March may require the marathon to be attempted a few days or so outside of this preferred date range. It is important to remember that even the slightest amount of light from a tiny crescent moon phase may prevent some of the faintest of Messier's objects to be observable while the Moon is above the horizon.
+The most ideal night of a Messier Marathon will usually fall around March 15th to the 25th. However, it is necessary to take the [phase of the Moon](https://moonphases.co.uk/moon-calendar) into account as you should really only attempt the marathon during a new moon phase. Therefore, the particular date of the new moon phase around March may require the marathon to be attempted a few days outside of this preferred date range. It is important to remember that even the slightest amount of light from a tiny crescent moon phase may prevent some of the faintest of Messier's objects to be observable while the Moon is above the horizon.
 
-The location of where a Messier Marathon will take place is very important. The most ideal location on Earth may have a latitude between 12°N to 26°N. However, latitudes within the range of 8°N to 36°N may also provide a decent opportunity for a successful marathon. Any location outside of 4°N to 40°N latitude will not have a realistic chance for a successful marathon.
+The location where a Messier Marathon will take place is very important. The most ideal location on Earth may have a latitude between 12°N to 26°N. However, latitudes within the range of 8°N to 36°N may also provide a decent opportunity for a successful marathon. Any location outside of 4°N to 40°N latitude will not have a realistic chance for a successful marathon.
 
-An excellent view of the horizon to both the East and West (and possibly to the South) will also be necessary. The location should also be free from [light pollution](https://lightpollutionmap.app/) as much as possible. A [Bortle Class](https://telescope.live/blog/bortle-scale) 4 sky may be adequate depending on the latitude and elevation of the location, the size and quality of your telescope and the current seeing conditions.  All of these factors come into play in determining your chance of successfully completing a Messier Marathon.
+An excellent view of the horizon to both the east and west (and possibly to the south) will also be necessary. The location should also be free from [light pollution](https://lightpollutionmap.app/) as much as possible. A [Bortle Class](https://telescope.live/blog/bortle-scale) 4 sky may be adequate depending on the latitude and elevation of the location, the size and quality of your telescope and the current seeing conditions.  All of these factors come into play in determining your chances of successfully completing a Messier Marathon.
 
 During the marathon, a log should be used to make notes of every Messier object discovery (or failed discovery). In particular, the time of each discovery should be noted.
 
-It is very important to know that a good amount of planning and practice will be necessary prior to attempting a Messier Marathon. This Stellarium script can help with some of the planning. It is also strongly advisable to attempt a few small "Messier Mini-Marathons" (maybe 25 or so Messier objects in one night instead of all 110) throughout the year to get acquainted with finding all of the Messier objects. **Good luck**!
+It is very important to know that a considerable amount of planning and practice will be necessary prior to attempting a Messier Marathon. This Stellarium script can help with some of the planning. It is also strongly advisable to attempt a few small "Messier Mini-Marathons" (maybe 25 or so Messier objects in one night instead of all 110) throughout the year to get acquainted with finding all of the Messier objects.
+
+One final thought... Even if all 110 Messier objects are not found in one night, any meaningful attempt at a Messier Marathon should be considered a success. Actually completing a Messier Marathon can sometimes take as much luck as it does skill. You should feel good about yourself just by making an attempt at a Messier Marathon. **Good luck**!
 <br>
 <br>
 
@@ -93,9 +98,9 @@ There is another opportunity to _almost_ complete a full Messier Marathon every 
 
 From mid-October to mid-November of any year, it may be possible to see at least 107 Messier objects in one night if the marathon location is between 0°N and 44°N latitude. (The exact dates to see at least 107 objects are latitude-dependent.) In fact, locations at a latitude between 13°N and 26°N may actually be able to see as many as 109 objects between October 29 and November 2! (M83 will be the limiting object.) As always, take the phase of the Moon into account when making any attempt at finding Messier objects on any night of the year.
 
-There is an additional challenge to consider if wanting to attempt this partial marathon in the fall season. Once the Sun sets, dozens of Messier objects in and around the constellations of Scorpius and Sagittarius need to be identified very quickly as these objects are just above the western horizon at sunset and will be setting very soon.
+There is an additional challenge to consider if wanting to attempt this partial marathon in the fall season. Once the Sun sets, dozens of Messier objects in and around the constellations of Scorpius and Sagittarius need to be identified very quickly as these objects are just above the western horizon at sunset and will be below the horizon very soon after sunset.
 
-Although a full Messier Marathon will not be possible in the fall, this attempt still presents a great opportunity to train for the actual full marathon in the spring while still providing an extremely worthy challenge!
+Although a full Messier Marathon will not be possible in the fall, this attempt still presents a great opportunity to train for the actual full marathon in the spring while still providing a worthwhile challenge!
 <br>
 <br>
 
@@ -103,7 +108,7 @@ Although a full Messier Marathon will not be possible in the fall, this attempt 
 
 Unfortunately, the dates of the new moon phases in early 2027 will not provide a great opportunity for many people to successfully complete a full Messier Marathon in all of 2027.
 
-The date of a new moon phase in 2027 that will provide the best opportunity to complete a full marathon in 2027 will be the night around March 7. However, the date of this early new moon comes about one week before the preferred range of dates typically desired to perform a full marathon (March 15 - 25). And, the new moon on the night around April 6 will not offer a realistic opportunity of completing a full Messier Marathon to anyone. The main issue with the dates of these new moon phases in March and April is being able to visually identify the few more challenging objects just after sunset or before sunrise as these objects will be extremely low to the horizon.  And, at the same time, the sky may still have some glow from a Sun that is not far enough below the horizon after sunset or before sunrise.
+The date of a new moon phase in 2027 that will provide the best opportunity to complete a full marathon in 2027 will be a night around March 7. However, the date of this early new moon comes about one week before the preferred range of dates typically desired to perform a full marathon (March 15 - 25). And, the new moon on the night of April 6 will not offer a realistic opportunity of completing a full Messier Marathon to anyone. The main issue with the dates of these new moon phases in March and April is being able to visually identify the few more challenging objects just after sunset or before sunrise as these objects will be extremely low to the horizon.  And, at the same time, the sky may still have some glow from a Sun that is not far enough below the horizon after sunset or before sunrise.
 
 Because of this early new moon phase in March 2027, the location to complete a full marathon around the new moon phase on March 7 will be approximately limited to between 8°N and 20°N latitude. However, the farther north you are within this latitude range, the more challenging the marathon will be. A more realistic latitude range will be approximately between 9°N and 14°N. And, unfortunately, the most ideal latitude range will be extremely limited to approximately between 11°N and 12°N.
 
@@ -111,13 +116,13 @@ An attempt at a full marathon can always be made later in March 2027 or very ear
 
 Note that even if your location is not within the ideal latitude ranges described above, the dates of March 7 or April 6 will still allow for the vast majority of Messier objects to be seen in the same night. The issue described above is only for those desiring to identify _all_ 110 Messier objects. Even if you are at a latitude that will not allow for a full marathon, please still consider taking on this challenge of finding as many Messier objects as possible.
 
-(In case you are wondering, a full marathon in 2028 will be far more achievable! :grin:)
+(In case you are wondering, a full marathon in 2028 will be far more achievable at more locations! More info to come later. :grin:)
 <br>
 <br>
 
 # Instructions
 
-The following instructions below are ideal for anyone who is not completely comfortable with running scripts.  Anyone with good computer skills and familiarity with [Stellarium](https://stellarium.org/) may already know how to run a script in Stellarium. Although there are a number of ways to run a script in Stellarium, only one method will be described here. Feel free to experiment on how best to run this script.  It is assumed Stellarium is already installed prior to starting these instructions and some very basic knowledge of Stellarium is understood.
+The following instructions below on how to run this Stellarium script are ideal for anyone who is not completely comfortable with running scripts.  Anyone with decent computer skills and familiarity with [Stellarium](https://stellarium.org/) may already know how to run a script in Stellarium. Although there are a number of ways to run a script in Stellarium, only one method will be described here. Feel free to experiment with how it may best to run this script.  It is assumed Stellarium is already installed prior to starting these instructions and some very basic knowledge of Stellarium is understood.
 
 ### Starting and Running the Script
 
@@ -125,28 +130,29 @@ The following instructions below are ideal for anyone who is not completely comf
    - Right-click this [link](https://github.com/StellariumScripts/stellarium-messier-marathon/raw/refs/heads/main/messier_marathon_simulation.ssc) and select "Save link as...".
 * Start Stellarium.
 * In Stellarium, go to the exact location on Earth where the marathon will take place.
-* Press the `[F12]` key on your keyboard to bring up the Script Console window in Stellarium.
+* Press the `[F12]` key on your keyboard to bring up the **Script Console** window in Stellarium.
 * Begin the search for the `messier_marathon_simulation.ssc` script file:
-   - Click the ![File folder](images/file_open.png) icon in the top-left of the Script Console window.
+   - Click the ![File folder](images/file_open.png) icon in the top-left of the **Script Console** window.
 * Search for and open the downloaded `messier_marathon_simulation.ssc` script file.
 * Make any desirable edits to the script found under the "Script" tab:
    - See instructions further below on editing the script variables.
    - However, it is perfectly fine to run the script without any edits if wanting to simply test the script.
 * Play the script:
-   - Click the ![Play button](images/play_button.png) icon near the top-right of the Script Console window.
-* The entire Script Console window may be closed now while the script is running:
-   - Click the ![Close button](images/close_button.png) in the top-right of the Script Console window.
+   - Click the ![Play button](images/play_button.png) icon near the top-right of the **Script Console** window.
+* The entire **Script Console** window may be closed now while the script is running:
+   - Click the ![Close button](images/close_button.png) in the top-right of the **Script Console** window.
+   - Closing the **Script Console** window while the script is running will not affect the script's operation.
 * It may take several minutes for the entire script to finish.
 
-### When The Script Finishes
+### When the Script Finishes
 
-* Once the script finishes, press the `[F12]` key on your keyboard to bring up the Script Console window again.
+* Once the script finishes, press the `[F12]` key on your keyboard to bring up the **Script Console** window again.
 * Click the "Output" tab to see helpful information at the top pertaining to your specific marathon.
-* There will also be a lot of data underneath a `------- CSV -------` line. This data is explained in the next section below.
+* There will also be a lot of information underneath a `------- CSV -------` line. This information is explained in the next section below.
 
 ### Optional
 
-* In the "Output" tab of the Script Console window, a portion of the output data is the CSV information that can be used to create a very helpful time schedule.
+* In the "Output" tab of the **Script Console** window, a portion of the output data is the CSV information that can be used to create a very helpful time schedule.
 * The CSV information is all located under the `------- CSV -------` line.
 * This CSV information can be copied and pasted into a regular empty text file on your computer.
 * The text file should then be saved with a `.csv` extension to its filename.
@@ -161,19 +167,19 @@ A further option is to have the script automatically save the final output to tw
 * CSV file with a `.csv` extension
 * TXT file with a `.txt` extension
 
-The benefit of automatically generating these two text files is that copying and pasting the CSV information from the Script Console into a text file as described above would no longer be necessary as the same information would automatically be saved in the generated CSV file. The other automatically generated file - the TXT file - will simply contain all of the information from the "Output" tab. It is strongly recommended to edit the script to automatically generate these two files. (See instructions further below regarding editing the `saveToOutputFiles` variable to enable this feature.)
+The benefit of automatically generating these two text files is that the entire "Optional" section above would not be needed and can then be completely ignored. Copying and pasting the CSV information from the **Script Console** into a text file as described in the "Optional" section above would no longer be necessary as the same information would automatically be saved in the generated CSV file. The other automatically generated file - the TXT file - will simply contain all of the information from the "Output" tab. It is strongly recommended to edit the `saveToOutputFiles` variable in the script to allow the script to automatically generate these two files. (See instructions further below regarding editing the `saveToOutputFiles` variable to enable this feature.)
 
-### Final Steps
+### Final Step
 
-If any edits to the script have been made to your liking in the Script Console window, it is best to make those same edits to the downloaded `messier_marathon_simulation.ssc` script file.  Any future execution of the script will no longer have to be manually edited in the Script Console window as the edits would already be present in the `messier_marathon_simulation.ssc` script file.
+If any edits to the script have been made to your liking in the **Script Console** window, it is best to make those same edits to the downloaded `messier_marathon_simulation.ssc` script file.  Any future execution of the script will no longer have to be manually edited in the **Script Console** window as the edits would already have been made in the `messier_marathon_simulation.ssc` script file.
 <br>
 <br>
 
 # Editing the Script Variables
 
-While the script can be run successfully without any edits to the script, in reality, you will actually need to make some edits to the script to customize it for your particular Messier Marathon. Near the very top of the code in the script are a few variables that will need to be edited. While the edits may be made directly within the Script Console window, those same edits should be made later to the `messier_marathon_simulation.ssc` script file itself. The following will describe each of these variables and how they may be edited.
+While the script can simply be run successfully without any edits to the script, the default script will not be customized for your own Messier Marathon. To customize the script for your Messier Marathon, you will need to make some edits to the script. Near the very top of the code in the script are a few variables that will need to be edited. While the edits may be made directly within Stellarium's Script Console window, those same edits should be made later to the `messier_marathon_simulation.ssc` script file itself. The following will describe each of these variables and how they may be edited.
 
-The one important thing to know about how this script operates is that you are to decide how dark you prefer the sky to be just after sunset and just before sunrise by deciding [how low below the horizon](https://www.timeanddate.com/astronomy/different-types-twilight.html) you wish the sun to be at these moments. The `sunSetAlt` and `sunRiseAlt` variables (described below) will need to be set accordingly.
+The one important thing to know about how this script operates is that you are to decide how dark you prefer the sky to be just after sunset when starting the marathon and how much brightness you will allow just before sunrise when ending the marathon. These two exact moments in time will be determined by how low [below the horizon](https://www.timeanddate.com/astronomy/different-types-twilight.html) you wish the sun to be after sunset and before sunrise. Therefore, the `sunSetAlt` and `sunRiseAlt` variables (described below) will need to be set accordingly, and the script will then determine the exact times the marathon should start and end. This is the reason you will not be entering the start and end times into the script.
 
 ---
 
@@ -195,23 +201,29 @@ The script will end the marathon at the exact moment the Sun is at a particular 
 
 ---
 
-### 4. `waitSecondsBetweenSelections`
+### 4. `keepLandscape`
+
+If this value is set to `yes`, the landscape displayed just prior to starting this script will be visible during the simulation.  If you want the generic landscape displayed during the simulation, set this value to `no`. It may be best to keep this value as `no`.
+
+---
+
+### 5. `waitSecondsBetweenSelections`
 
 This is the length of real time - in seconds - the simulation will spend on each Messier object.  To make the simulation run slower, increase the default time of `1.5` seconds to a higher value.  To make the simulation run faster, decrease the default time of `1.5` seconds to a lower value. The value must be greater than `0`. Note that this is a purely cosmetic option and does not alter the outcome results of the script.
 
 ---
 
-### 5. `saveToOutputFiles`
+### 6. `saveToOutputFiles`
 
-In addition to the output appearing in the "Output" tab in the Script Console, this script can also save the same output to two different text files - a TXT file with a `.txt` extension and the other being a CSV file with a `.csv` extension. The TXT file simply contains all of the exact same information found in the "Output" tab when the script finishes.  The CSV file is just a subset of the "Output" tab information.  Therefore, the CSV file only contains the CSV portion of the total output.  The filenames are time-stamped (using the exact time the script started) for convenience so the script can be run multiple times and the resulting output files will not be overwritten.
+In addition to the output appearing in the "Output" tab in the Script Console, this script can also save the same output to two different text files to your computer - a TXT file with a `.txt` extension and the other being a CSV file with a `.csv` extension. The TXT file simply contains all of the exact same information found in the "Output" tab when the script finishes.  The CSV file is just a subset of the "Output" tab information.  Therefore, the CSV file only contains the CSV portion of the total output.  The filenames are time-stamped (using the exact time the script started) for convenience so the script can be run multiple times and the resulting output files will not be overwritten.
 
 If you want to enable the option of saving the output to these two files, simply change the value of this variable from the default value of `no` to `yes`. It is recommended you enable this feature by changing this value to `yes`.
 
 ---
 
-### 6. `MyMessierList`
+### 7. `MyMessierList`
 
-This list contains your desired order of finding each Messier object.  If you have not come up with your own order, then you may start with the default list already present in this script or find another order someone else on the internet has derived. When updating this list, please pay attention to the syntax and punctuation.  Every line in this list should only have one Messier object and look very similar to this:
+This list contains your desired order of finding each Messier object.  If you have not come up with your own order, then you may start with the default list already present in this script or find another order someone else on the internet has derived. When updating this list, please pay attention to the syntax and punctuation. Do not include a space in between the "M" and the number. Every line in this list should only have one Messier object and look very similar to this:
 
 ```
    "M101",
@@ -219,7 +231,7 @@ This list contains your desired order of finding each Messier object.  If you ha
 
 ---
 
-### 7. `MinutesDurations`
+### 8. `MinutesDurations`
 
 If it is believed a particular Messier object may take considerably more or less time than the average length of time to find, then it may be best to enter the time needed (in terms of minutes) for finding that Messier object in this `MinutesDurations` list. For reference, the typical average amount of time needed to find a Messier object may be around 5 minutes. Any Messier object either missing from this list or assigned the value of `0` will automatically be allocated an average length of time by the script. Note that the order of the Messier objects in this list is not important, nor is it even required to have _any_ Messier object listed in this list.
 
@@ -227,13 +239,13 @@ It is purely optional to do any editing to this `MinutesDurations` list. You may
 
 **Examples:**
 
-If M83 is difficult for you to find and takes about 10 minutes to find, the line for M83 should be edited/added to look exactly as such:
+If M83 is difficult for you to find and takes about 10 minutes to find, the line for M83 should be edited to look exactly as such:
 
 ```
 "M83" : 10,
 ```
 
-If M45 is easy for you to find and only takes about 30 seconds to find, the line for M45 should be edited/added to look exactly as such:
+If M45 is easy for you to find and only takes about 30 seconds to find, the line for M45 should be edited to look exactly as such:
 
 ```
 "M45" : 0.5,
@@ -247,9 +259,9 @@ If M45 is easy for you to find and only takes about 30 seconds to find, the line
 
 ---
 
-### 8. `MessierChartNum`
+### 9. `MessierChartNum`
 
-This list is another purely optional list. The purpose of this list is to output a star chart designation for each Messier object with the rest of the information the CSV data will have on the Messier object. If the method of finding the Messier objects is using a star atlas, this output can be helpful to have with your printed time schedule. As you proceed through the marathon during the night, it may make it easier to quickly know which start chart contains the next Messier object you are to find. The default values with this script are the chart numbers from _Sky & Telescope's Pocket Sky Atlas_.
+This list is another purely optional list. The purpose of this list is to output a star chart designation for each Messier object with the rest of the information the CSV data will have on the Messier object. If the method of finding the Messier objects is using a star atlas, this output can be helpful to have with your printed time schedule. As you proceed through the marathon during the night, it may make things easier to quickly know which start chart contains the next Messier object you are to find. The default values with this script are the chart numbers from _Sky & Telescope's Pocket Sky Atlas_.
 
 **Example:**
 
@@ -297,8 +309,9 @@ Of course, a simple restart of Stellarium will not only clean up the labels and 
 
 If you set the `saveToOutputFiles` variable in the script to `yes`, then the script will generate two text files (CSV and TXT) at the completion of the script.  Here are where the two text files should be found:
 
-* In Windows:
+* In Windows (here are two different methods to go to the same location):
     * `C:\Users\<your username>\AppData\Roaming\Stellarium`
+    * `%APPDATA%\Stellarium`
 * In Linux:
     * `~/.stellarium`
 * In macOS:
@@ -344,13 +357,13 @@ Immediately after the script is started (while "Messier Marathon" is displayed o
 <br>
 ## Can I use this script for a "Messier Mini-Marathon"?
 
-Yes. There is absolutely no restriction to the number of Messier objects this script will use.  This allows you to perform a marathon consisting fewer than the entire catalog of 110 objects. In the `MyMessierList` list, simply add or remove Messier objects as desired.  The script will automatically make any adjustments based on whatever number of Messier objects happen to be listed in the `MyMessierList` list.
+Yes. There is absolutely no restriction to the number of Messier objects this script will use.  This allows you to perform a marathon that does not consist of the entire catalog of 110 objects. In the `MyMessierList` list, simply add or remove Messier objects as desired.  The script will automatically make any adjustments based on whatever number of Messier objects happen to be listed in the `MyMessierList` list.
 <br>
 <br>
 
 ## Can I perform a "Messier Mini-Marathon" any time of the year?
 
-Yes. It is possible to perform a Messier Mini-Marathon any night of the year.  As many as 90 or more Messier objects may be visible throughout an entire night any night of the year at many locations. (The exact number is date and latitude dependent.) As always, take the [phase of the Moon](https://moonphases.co.uk/moon-calendar) in consideration.
+Yes. It is possible and you are encouraged to perform a Messier Mini-Marathon any night of the year.  As many as 90 or more Messier objects may be visible throughout an entire night any night of the year at many locations. (The exact number is date and latitude dependent.) As always, take the [phase of the Moon](https://moonphases.co.uk/moon-calendar) in consideration.
 
 A Messier Mini-Marathon does not have to take an entire night. Begin practicing for the real Messier Marathon by doing short marathons consisting of possibly 25 or so Messier objects.
 <br>
@@ -360,7 +373,7 @@ A Messier Mini-Marathon does not have to take an entire night. Begin practicing 
 
 No. Absolutely not! It can actually be quite challenging to determine an order that could even be considered close to perfect. This is especially true for the Messier objects close to the horizon near sunset and sunrise. While the default order included with this script may provide a decent start, it should be up to you to find an order that suits you best. Continually change the order of the Messier objects in this script to test your own order and determine if it is ideal for you.
 
-Some factors in deciding the order may include the date and location of your Messier Marathon in addition to your level of comfort in finding particular Messier objects. Also feel free to change the order of the Messier Objects in the `MyMessierList` variable so that fewer Messier objects will be observed near the zenith. This is helpful as finding objects near the zenith can be cumbersome - especially with a Dobsonian telescope.
+Some factors in deciding the order may include the date and location of your Messier Marathon in addition to your level of comfort in finding particular Messier objects. Also feel free to change the order of the Messier objects in the `MyMessierList` variable so that fewer Messier objects will be observed near the zenith. This is helpful as finding objects near the zenith can be cumbersome - especially with a Dobsonian telescope.
 
 A large component of the fun that goes into a Messier Marathon is determining your own sequence of Messier objects to find.
 <br>
@@ -368,19 +381,19 @@ A large component of the fun that goes into a Messier Marathon is determining yo
 
 ## Can I configure the script to my own tastes?
 
-Yes. Feel free to make edits to the `messier_marathon_simulation.ssc` script file. The script contains a good amount of comments. A little bit of common sense may even help to understand what a particular line of code is doing.  Do not worry. Editing the script will not "damage" your Stellarium program. If Stellarium is ever in a state of confusion, simply restart Stellarium.
+Yes. Feel free to make edits to the `messier_marathon_simulation.ssc` script file. The script contains a good amount of comments. A little common sense may even help to understand what a particular line of code is doing.  Do not worry. Editing the script will not "damage" your Stellarium program. If Stellarium is ever in a state of confusion, simply restart Stellarium.
 <br>
 <br>
 
 ## Can I use this script for objects that are not Messier objects?
 
-Yes. Despite the emphasis of using this script for Messier objects, essentially any object in the night sky can be entered in the `MyMessierList` variable list. This flexibility gives you the opportunity to observe a custom list of non-Messier objects in the night sky. The one thing to make certain is to use the identical naming of the object that Stellarium uses. Please understand that there will be some `undefined` fields for any of the non-Messier objects in the final output. For any tech-savvy person, to remove the `undefined` outputs, add the information for the non-Messier objects in the `MessierChartNum`, `MessierObjectType`, and `typeInitialsLookup` lists located throughout the code.
+Yes. Despite the emphasis of using this script for Messier objects, essentially any object in the night sky can be entered in the `MyMessierList` variable list. This flexibility gives you the opportunity to observe a custom list of non-Messier objects in the night sky. The one thing to make certain is to use the identical naming of the object that Stellarium uses. Please understand that there will be some `undefined` fields for any of the non-Messier objects in the final output. For any tech-savvy person, to remove the `undefined` outputs, add the information for the non-Messier objects in the `MessierChartNum`, `MessierObjectType`, and `typeInitialsLookup` lists located throughout the script.
 <br>
 <br>
 
 ## What programming language is used in this script?
 
-The programming language used in this `messier_marathon_simulation.ssc` script file is called [JavaScript](https://www.w3schools.com/js/). Edits to the script can be done and saved in Stellarium's Script Console window. However, if wanting to make edits to the script outside of the Stellarium program, a good suggestion would be to open the `messier_marathon_simulation.ssc` script file with [Notepad++](https://notepad-plus-plus.org/) (or a similar type of advanced text editor).  After the `messier_marathon_simulation.ssc` script file is opened with Notepad++, in the top menu of Notepad++ select:
+The programming language used in this `messier_marathon_simulation.ssc` script file is called [JavaScript](https://www.w3schools.com/js/). Edits to the script can be done and saved in Stellarium's Script Console window. However, if you want to make edits to the script outside of the Stellarium program, a good suggestion would be to open the `messier_marathon_simulation.ssc` script file with [Notepad++](https://notepad-plus-plus.org/) (or a similar type of advanced text editor).  After the `messier_marathon_simulation.ssc` script file is opened with Notepad++, in the top menu of Notepad++ select:
 
 > **Language** ![Right arrow](images/right_arrow.png) **J** ![Right arrow](images/right_arrow.png) **JavaScript**
 <br>
